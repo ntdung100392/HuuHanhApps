@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{25463BAC-208A-4308-ACC0-FA51BB1946CF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HHCoApps.Core</RootNamespace>
+    <AssemblyName>HHCoApps.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Imp\CoreEntity.cs" />
+    <Compile Include="Core\Interface\IAuditableEntity.cs" />
+    <Compile Include="EF\Customer.cs" />
+    <Compile Include="EF\Log.cs" />
+    <Compile Include="EF\Product.cs" />
+    <Compile Include="EF\Category.cs" />
+    <Compile Include="EF\Supplier.cs" />
+    <Compile Include="EF\Users.cs" />
+    <Compile Include="HHCoAppsDBContext.cs" />
+    <Compile Include="Migrations\201712171042421_Init Database.cs" />
+    <Compile Include="Migrations\201712171042421_Init Database.Designer.cs">
+      <DependentUpon>201712171042421_Init Database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712171130571_Add Product Field.cs" />
+    <Compile Include="Migrations\201712171130571_Add Product Field.Designer.cs">
+      <DependentUpon>201712171130571_Add Product Field.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801011852591_UpdateForeignKey Product.cs" />
+    <Compile Include="Migrations\201801011852591_UpdateForeignKey Product.Designer.cs">
+      <DependentUpon>201801011852591_UpdateForeignKey Product.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801021652421_Add HomeTown.cs" />
+    <Compile Include="Migrations\201801021652421_Add HomeTown.Designer.cs">
+      <DependentUpon>201801021652421_Add HomeTown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801031524262_Remove HomeTown.cs" />
+    <Compile Include="Migrations\201801031524262_Remove HomeTown.Designer.cs">
+      <DependentUpon>201801031524262_Remove HomeTown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801060652437_Update Log Table.cs" />
+    <Compile Include="Migrations\201801060652437_Update Log Table.Designer.cs">
+      <DependentUpon>201801060652437_Update Log Table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801110942455_Rename Product Category Table.cs" />
+    <Compile Include="Migrations\201801110942455_Rename Product Category Table.Designer.cs">
+      <DependentUpon>201801110942455_Rename Product Category Table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801111027255_Add Category Code.cs" />
+    <Compile Include="Migrations\201801111027255_Add Category Code.Designer.cs">
+      <DependentUpon>201801111027255_Add Category Code.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801130902585_Rename ProductCategory to Category.cs" />
+    <Compile Include="Migrations\201801130902585_Rename ProductCategory to Category.Designer.cs">
+      <DependentUpon>201801130902585_Rename ProductCategory to Category.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801131027101_Add Product Status.cs" />
+    <Compile Include="Migrations\201801131027101_Add Product Status.Designer.cs">
+      <DependentUpon>201801131027101_Add Product Status.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201712171042421_Init Database.resx">
+      <DependentUpon>201712171042421_Init Database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712171130571_Add Product Field.resx">
+      <DependentUpon>201712171130571_Add Product Field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801011852591_UpdateForeignKey Product.resx">
+      <DependentUpon>201801011852591_UpdateForeignKey Product.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801021652421_Add HomeTown.resx">
+      <DependentUpon>201801021652421_Add HomeTown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801031524262_Remove HomeTown.resx">
+      <DependentUpon>201801031524262_Remove HomeTown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801060652437_Update Log Table.resx">
+      <DependentUpon>201801060652437_Update Log Table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801110942455_Rename Product Category Table.resx">
+      <DependentUpon>201801110942455_Rename Product Category Table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801111027255_Add Category Code.resx">
+      <DependentUpon>201801111027255_Add Category Code.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801130902585_Rename ProductCategory to Category.resx">
+      <DependentUpon>201801130902585_Rename ProductCategory to Category.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801131027101_Add Product Status.resx">
+      <DependentUpon>201801131027101_Add Product Status.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
