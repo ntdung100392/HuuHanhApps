@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -195,6 +195,10 @@
     <ProjectReference Include="..\HHCoApps.Libs\HHCoApps.Libs.csproj">
       <Project>{C9015688-D621-41EB-9D80-549C015F7E7A}</Project>
       <Name>HHCoApps.Libs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HHCoApps.Services\HHCoApps.Services.csproj">
+      <Project>{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}</Project>
+      <Name>HHCoApps.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

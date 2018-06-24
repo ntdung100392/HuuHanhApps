@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Core", "Src\HHCoApps.Core\HHCoApps.Core.csproj", "{25463BAC-208A-4308-ACC0-FA51BB1946CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Core", "HHCoApps.Core\HHCoApps.Core.csproj", "{25463BAC-208A-4308-ACC0-FA51BB1946CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Libs", "Src\HHCoApps.Libs\HHCoApps.Libs.csproj", "{C9015688-D621-41EB-9D80-549C015F7E7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Services", "HHCoApps.Services\HHCoApps.Services.csproj", "{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{95AACFD0-774E-4E44-B6F7-4627D3EB4CD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Libs", "HHCoApps.Libs\HHCoApps.Libs.csproj", "{C9015688-D621-41EB-9D80-549C015F7E7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WareHouseApps", "Src\WareHouseApps\WareHouseApps.csproj", "{40A38426-C968-4404-BCAD-356EE731D8C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WareHouseApps", "WareHouseApps\WareHouseApps.csproj", "{40A38426-C968-4404-BCAD-356EE731D8C6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WareHouseView", "WareHouseView", "{92955BFE-5EC2-4564-82A0-8C09318A3F79}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WareHouseHHCoLtd", "WareHouseHHCoLtd\WareHouseHHCoLtd.vdproj", "{6446E519-C572-4DCF-AA8C-F60C824BAAB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +23,10 @@ Global
 		{25463BAC-208A-4308-ACC0-FA51BB1946CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25463BAC-208A-4308-ACC0-FA51BB1946CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25463BAC-208A-4308-ACC0-FA51BB1946CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C9015688-D621-41EB-9D80-549C015F7E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9015688-D621-41EB-9D80-549C015F7E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9015688-D621-41EB-9D80-549C015F7E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,16 +35,14 @@ Global
 		{40A38426-C968-4404-BCAD-356EE731D8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40A38426-C968-4404-BCAD-356EE731D8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40A38426-C968-4404-BCAD-356EE731D8C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Debug|Any CPU.ActiveCfg = Debug
+		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Release|Any CPU.ActiveCfg = Release
+		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {269F4130-5AE8-4CF4-B880-04B267A3AFBF}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{25463BAC-208A-4308-ACC0-FA51BB1946CF} = {95AACFD0-774E-4E44-B6F7-4627D3EB4CD5}
-		{C9015688-D621-41EB-9D80-549C015F7E7A} = {95AACFD0-774E-4E44-B6F7-4627D3EB4CD5}
-		{40A38426-C968-4404-BCAD-356EE731D8C6} = {92955BFE-5EC2-4564-82A0-8C09318A3F79}
 	EndGlobalSection
 EndGlobal
