@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HHCoApps.Core;
 
 namespace HHCoApps.Services.Implementation
 {
@@ -23,23 +24,17 @@ namespace HHCoApps.Services.Implementation
             categoryRepository = new Repository<Category>(dbContext);
         }
 
-        #region Product
-        public IEnumerable<ProductModel> GetAllProductBySupplier(Guid supplierId)
+        public IEnumerable<Product> GetAllProductBySupplier(Guid supplierId)
         {
-            try
+            using (var context = new HHCoAppsDBContext())
             {
-                var data = productRepository.GetAll()
-                    .Where(p => p.SupplierId == supplierId && p.IsActive && !p.IsDeleted).ToList();
-                if (data.Count() > 0)
-                    return data.Select(p => Mapper.Map<Product, ProductModel>(p));
-                else
-                    return null;
+                return GetAllProductBySupplier(supplierId, context.Products).ToList();
             }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                return null;
-            }
+        }
+
+        internal IEnumerable<Product> GetAllProductBySupplier(Guid supplierId, IQueryable<Product> products)
+        {
+            return products.Where(p => p.SupplierId == supplierId && p.IsActive && !p.IsDeleted);
         }
 
         public IEnumerable<ProductModel> GetProducts()
@@ -50,8 +45,7 @@ namespace HHCoApps.Services.Implementation
                     .Where(p => p.IsActive && !p.IsDeleted).OrderByDescending(p => p.IssuedDate).ToList();
                 if (data != null && data.Count() != 0)
                     return data.Select(p => Mapper.Map<Product, ProductModel>(p));
-                else
-                    return null;
+                return null;
             }
             catch (Exception ex)
             {
@@ -59,15 +53,13 @@ namespace HHCoApps.Services.Implementation
                 return null;
             }
         }
-        #endregion
 
-        #region Category
         public IEnumerable<CategoryModel> GetCategories()
         {
             try
             {
                 var data = categoryRepository.GetAll();
-                if (data.Count() > 0)
+                if (data.Any())
                     return data.ToList().Select(c => Mapper.Map<Category, CategoryModel>(c));
                 else
                     return null;
@@ -120,9 +112,7 @@ namespace HHCoApps.Services.Implementation
                 var entity = Mapper.Map<CategoryModel, Category>(model);
                 categoryRepository.Insert(entity);
                 SaveChanges();
-                _logger.Info(
-                    string.Format("New Category has been added by {0}: {1}",
-                    Thread.CurrentPrincipal.Identity.Name, model.Name));
+                _logger.Info($"New Category has been added by {Thread.CurrentPrincipal.Identity.Name}: {model.Name}");
                 return true;
             }
             catch (Exception ex)
@@ -141,9 +131,9 @@ namespace HHCoApps.Services.Implementation
                 entity.Code = model.Code;
                 categoryRepository.Update(entity);
                 SaveChanges();
-                _logger.Info(
-                    string.Format("Category has been updated by {0}: {1}",
-                    Thread.CurrentPrincipal.Identity.Name, model.Name));
+                if (Thread.CurrentPrincipal != null)
+                    _logger.Info(string.Format("Category has been updated by {0}: {1}",
+                        Thread.CurrentPrincipal.Identity.Name, model.Name));
                 return true;
             }
             catch (Exception ex)
@@ -152,6 +142,5 @@ namespace HHCoApps.Services.Implementation
                 return false;
             }
         }
-        #endregion
     }
 }

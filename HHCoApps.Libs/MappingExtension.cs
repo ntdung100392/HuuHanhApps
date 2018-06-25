@@ -17,15 +17,10 @@ namespace HHCoApps.Libs
         /// </summary>
         public static void Mapping(this MapperConfigurationExpression Configuration)
         {
-            Configuration.CreateMap<Users, UserModel>().ReverseMap();
+            Configuration.CreateMap<User, UserModel>().ReverseMap();
             Configuration.CreateMap<Category, CategoryModel>().ReverseMap();            
             Configuration.CreateMap<Supplier, SupplierModel>().ReverseMap();
             Configuration.CreateMap<Product, ProductModel>().ReverseMap();
-
-            //Configuration.CreateMap<UserModel, Users>();
-            //Configuration.CreateMap<CategoryModel, Category>();
-            //Configuration.CreateMap<ProductModel, Product>();
-            //Configuration.CreateMap<SupplierModel, Supplier>();
         }
     }
 }

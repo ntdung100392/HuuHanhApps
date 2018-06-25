@@ -19,6 +19,13 @@ namespace HHCoApps.Core
             Configuration.LazyLoadingEnabled = true;
         }
 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Configure domain classes using Fluent API here
@@ -27,22 +34,15 @@ namespace HHCoApps.Core
 
             base.OnModelCreating(modelBuilder);
 
-            #region User
-            modelBuilder.Entity<Users>()
-                .HasKey<Guid>(u => u.Id);
-            #endregion
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
 
-            #region Log
             modelBuilder.Entity<Log>()
-                .HasKey<int>(l => l.Id);
-            #endregion
+                .HasKey(l => l.Id);
 
-            #region Customer
             modelBuilder.Entity<Customer>()
                 .HasKey<int>(l => l.Id);
-            #endregion
 
-            #region Supplier
             modelBuilder.Entity<Supplier>()
                 .HasKey<Guid>(l => l.Id);
 
@@ -51,28 +51,23 @@ namespace HHCoApps.Core
                 .WithRequired(p => p.Supplier)
                 .HasForeignKey<Guid>(p => p.SupplierId)
                 .WillCascadeOnDelete();
-            #endregion
 
-            #region Product
             modelBuilder.Entity<Product>()
                 .HasKey<Guid>(l => l.Id);
 
             modelBuilder.Entity<Product>()
-                .HasRequired<Supplier>(p => p.Supplier)
+                .HasRequired(p => p.Supplier)
                 .WithMany(s => s.Products)
-                .HasForeignKey<Guid>(p => p.SupplierId);
-            #endregion
+                .HasForeignKey(p => p.SupplierId);
 
-            #region Product Category
             modelBuilder.Entity<Category>()
                 .HasKey<int>(l => l.Id);
 
             modelBuilder.Entity<Category>()
-                .HasMany<Product>(pc => pc.Products)
+                .HasMany(pc => pc.Products)
                 .WithRequired(p => p.Category)
-                .HasForeignKey<int>(p => p.CategoryId)
+                .HasForeignKey(p => p.CategoryId)
                 .WillCascadeOnDelete();
-            #endregion
         }
 
         public override int SaveChanges()
@@ -95,8 +90,8 @@ namespace HHCoApps.Core
                     }
                     else
                     {
-                        base.Entry(entity).Property(x => x.CreatedBy).IsModified = false;
-                        base.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+                        Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+                        Entry(entity).Property(x => x.CreatedDate).IsModified = false;
                     }
 
                     entity.ModifiedBy = string.IsNullOrEmpty(identityName) ? "System" : identityName;

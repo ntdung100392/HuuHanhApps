@@ -32,18 +32,15 @@ namespace WareHouseApps
             this.supplierServices = supplierServices;
             this.productServices = productServices;
             InitializeComponent();
-            this.CenterToParent();
+            CenterToParent();
         }
 
-        #region Form Event
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             LoadData();
         }
-        #endregion
 
-        #region Private Method
         private void LoadData()
         {
             try
@@ -94,13 +91,10 @@ namespace WareHouseApps
                 this.Close();
             }
         }
-        #endregion
-
-        #region Control Event
+        
         private void SearchProduct(object sender, EventArgs e)
         {
 
         }
-        #endregion
     }
 }

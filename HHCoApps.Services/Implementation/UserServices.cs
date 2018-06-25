@@ -14,17 +14,17 @@ namespace HHCoApps.Services.Implementation
 {
     public class UserServices : BaseServices, IUserServices
     {
-        private IRepository<Users> userRepository;
+        private IRepository<User> userRepository;
         public UserServices()
         {
-            userRepository = new Repository<Users>(dbContext);
+            userRepository = new Repository<User>(dbContext);
         }
 
         public bool InsertUser(UserModel user)
         {
             try
             {
-                var entity = Mapper.Map<Users>(user);
+                var entity = Mapper.Map<User>(user);
                 entity.IsActive = true;
                 entity.IsDeleted = false;
                 userRepository.Insert(entity);
@@ -40,7 +40,7 @@ namespace HHCoApps.Services.Implementation
         {
             try
             {
-                Users entity = userRepository.GetAll()
+                User entity = userRepository.GetAll()
                     .Where(u => u.UserName == user && u.PassWord == pass && !u.IsDeleted).FirstOrDefault();
                 return Mapper.Map<UserModel>(entity);
             }

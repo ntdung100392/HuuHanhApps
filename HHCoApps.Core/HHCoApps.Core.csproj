@@ -54,7 +54,7 @@
     <Compile Include="EF\Product.cs" />
     <Compile Include="EF\Category.cs" />
     <Compile Include="EF\Supplier.cs" />
-    <Compile Include="EF\Users.cs" />
+    <Compile Include="EF\User.cs" />
     <Compile Include="HHCoAppsDBContext.cs" />
     <Compile Include="Migrations\201712171042421_Init Database.cs" />
     <Compile Include="Migrations\201712171042421_Init Database.Designer.cs">
