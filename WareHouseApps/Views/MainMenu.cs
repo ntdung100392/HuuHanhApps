@@ -29,43 +29,43 @@ namespace WareHouseApps
 
         private void LoadReportForm(object sender, EventArgs e)
         {
-            Report reportForm = new Report();
+            var reportForm = new Report();
             reportForm.ShowDialog();
         }
 
         private void LoadCategoryForm(object sender, EventArgs e)
         {
-            CategoryList categoryForm = new CategoryList(_categoryServices);
+            var categoryForm = new CategoryList(_categoryServices);
             categoryForm.ShowDialog();
         }
 
         private void LoadProductForm(object sender, EventArgs e)
         {
-            ProductList productForm = new ProductList(_categoryServices, _supplierServices, _productServices);
+            var productForm = new ProductList(_categoryServices, _supplierServices, _productServices);
             productForm.ShowDialog();
         }
 
         private void LoadImportExportForm(object sender, EventArgs e)
         {
-            NoteList noteForm = new NoteList();
+            var noteForm = new NoteList();
             noteForm.ShowDialog();
         }
 
         private void btnSupplier_Click(object sender, EventArgs e)
         {
-            SupplierList supplierForm = new SupplierList(_supplierServices);
+            var supplierForm = new SupplierList(_supplierServices);
             supplierForm.ShowDialog();
         }
 
         private void ImportProduct(object sender, EventArgs e)
         {
-            ImportProduct importForm = new ImportProduct();
+            var importForm = new ImportProduct();
             importForm.ShowDialog();
         }
 
         private void ExportProduct(object sender, EventArgs e)
         {
-            ExportProduct exportForm = new ExportProduct();
+            var exportForm = new ExportProduct();
             exportForm.ShowDialog();
         }
 
@@ -85,6 +85,12 @@ namespace WareHouseApps
         private void TimerSetDate(object sender, EventArgs e)
         {
             lblDateTime.Text = DateTime.Now.ToString("hh:mm:ss dd/MM/yyyy");
+        }
+
+        private void btnAddProduct_Click(object sender, EventArgs e)
+        {
+            var addProductForm = new AddProduct();
+            addProductForm.ShowDialog();
         }
     }
 }

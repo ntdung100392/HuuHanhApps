@@ -4,12 +4,7 @@ using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WareHouseApps.Helper;
 using WareHouseApps.Models;
@@ -18,34 +13,30 @@ namespace WareHouseApps
 {
     public partial class CategoryList : BaseMethod
     {
-        private readonly ICategoryServices categoryServices;
-        private IList<CategoryViewModel> categoryList;
-        private CategoryViewModel selectedCategory;
+        private readonly ICategoryServices _categoryServices;
+        private IList<CategoryViewModel> _categoryList;
+        private CategoryViewModel _selectedCategory;
         public CategoryList(ICategoryServices categoryServices)
         {
-            this.categoryServices = categoryServices;
+            _categoryServices = categoryServices;
             InitializeComponent();
-            this.CenterToParent();
+            CenterToParent();
         }
 
-        #region Form Event
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             LoadData();
         }
-        #endregion
 
-        #region Private Method
         private void LoadData()
         {
-            var result = categoryServices.GetCategories();
-            if (result != null)
+            var result = _categoryServices.GetCategories();
+            if (result.Any())
             {
-                categoryList = result.ToList()
-                    .Select(c => Mapper.Map<CategoryModel, CategoryViewModel>(c)).OrderBy(c => c.Code).ToList();
+                _categoryList = result.Select(c => Mapper.Map<CategoryViewModel>(c)).OrderBy(c => c.Code).ToList();
             }
-            categoryViewModelBindingSource.DataSource = categoryList;
+            categoryViewModelBindingSource.DataSource = _categoryList;
         }
 
         private void ClearForm()
@@ -53,99 +44,99 @@ namespace WareHouseApps
             txtCode.Clear();
             txtName.Clear();
         }
-        #endregion
 
-        #region Control Event
         private void AddNewCategory(object sender, EventArgs e)
         {
-            if (YesNoDialog() == DialogResult.Yes)
+            if (YesNoDialog() != DialogResult.Yes)
+                return;
+
+            var model = new CategoryModel
             {
-                var model = new CategoryModel()
+                Code = txtCode.Text.Trim(),
+                Name = txtName.Text.Trim()
+            };
+
+            try
+            {
+                if (_categoryServices.AddCategory(model) != 0)
                 {
-                    Code = txtCode.Text.Trim(),
-                    Name = txtName.Text.Trim()
-                };
-                if (!categoryServices.CheckDuplicateCategory(model.Name))
-                {
-                    if (categoryServices.AddCategory(model))
-                    {
-                        LoadData();
-                        SuccessMessage();
-                        ClearForm();
-                    }
-                    else
-                    {
-                        ErrorMessage();
-                    }
+                    LoadData();
+                    SuccessMessage();
+                    ClearForm();
                 }
                 else
                 {
-                    ErrorMessage("Lỗi!", "Danh mục này đã tồn tại trong hệ thống!");
+                    ErrorMessage();
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                ErrorMessage();
             }
         }
 
         private void UpdateCategoryContent(object sender, EventArgs e)
         {
-            if (YesNoDialog() == DialogResult.Yes)
-            {
-                if (!categoryServices.CheckDuplicateCategory(txtName.Text.Trim()))
-                {
-                    var model = categoryServices.GetCategoryById(selectedCategory.Id);
-                    if (model != null)
-                    {
-                        model.Name = txtName.Text.Trim();
-                        model.Code = txtCode.Text.Trim();
+            if (YesNoDialog() != DialogResult.Yes)
+                return;
 
-                        if (categoryServices.UpdateCategory(model))
-                        {
-                            LoadData();
-                            SuccessMessage();
-                        }
-                        else
-                        {
-                            ErrorMessage();
-                        }
+            var model = _categoryServices.GetCategoryById(_selectedCategory.Id);
+            if (model != null)
+            {
+                model.Name = txtName.Text.Trim();
+                model.Code = txtCode.Text.Trim();
+
+                try
+                {
+                    if (_categoryServices.UpdateCategory(model))
+                    {
+                        LoadData();
+                        SuccessMessage();
                     }
                     else
                     {
                         ErrorMessage();
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ErrorMessage("Lỗi!", "Danh mục này đã tồn tại trong hệ thống!");
+                    _logger.Error(ex.Message);
+                    ErrorMessage();
                 }
+            }
+            else
+            {
+                ErrorMessage();
             }
         }
 
         private void GeneratedCategoryCode(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtName.Text.Trim()))
+            if (string.IsNullOrEmpty(txtName.Text.Trim()))
+                return;
+
+            var categoryName = string.Empty;
+            var splitNameResult = txtName.Text.Trim().Split();
+
+            if (splitNameResult.Length <= 1)
+                return;
+
+            var lenght = splitNameResult.Length;
+            for (var i = 0; i <= lenght - 1; i++)
             {
-                string userName = string.Empty;
-                var splitNameResult = txtName.Text.Trim().Split();
-                if (splitNameResult.Count() > 1)
-                {
-                    int lenght = splitNameResult.Count();
-                    for (int i = 0; i <= lenght - 1; i++)
-                    {
-                        userName += splitNameResult[i][0];
-                    }
-                    txtCode.Text = StringHelper.RemoveDiacritics(userName);
-                }
+                categoryName += splitNameResult[i][0];
             }
+            txtCode.Text = StringHelper.RemoveDiacritics(categoryName);
         }
 
         private void GetCategoryDetails(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedCategory = categoryList[e.RowIndex];
-                txtName.Text = selectedCategory.Name;
-                txtCode.Text = selectedCategory.Code;
-            }
+            if (e.RowIndex < 0) return;
+
+            _selectedCategory = _categoryList[e.RowIndex];
+            txtName.Text = _selectedCategory.Name;
+            txtCode.Text = _selectedCategory.Code;
         }
-        #endregion
     }
 }

@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using AutoMapper;
+using HHCoApps.Core.EF;
+using HHCoApps.Repository;
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
 
@@ -7,29 +12,38 @@ namespace HHCoApps.Services.Implementation
 {
     internal class CategoryServices : ICategoryServices
     {
+        private readonly ICategoryRepository _categoryRepository;
+
+        public CategoryServices(ICategoryRepository categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
+
         public IEnumerable<CategoryModel> GetCategories()
         {
-            throw new NotImplementedException();
+            var categories = _categoryRepository.GetCategories();
+            return categories.Any() ? categories.Select(c => Mapper.Map<CategoryModel>(c)).ToList() : Enumerable.Empty<CategoryModel>();
         }
 
         public CategoryModel GetCategoryById(int categoryId)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<CategoryModel>(_categoryRepository.GetCategoryById(categoryId));
         }
 
-        public bool CheckDuplicateCategory(string categoryName)
+        public int AddCategory(CategoryModel model)
         {
-            throw new NotImplementedException();
+            var entity = Mapper.Map<Category>(model);
+            entity.CreatedBy = Thread.CurrentPrincipal.Identity.Name;
+            entity.CreatedDate = DateTime.Now;;
+            return _categoryRepository.AddNewCategory(entity);
         }
 
-        public bool AddCategory(CategoryModel model)
+        public int UpdateCategory(CategoryModel model)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateCategory(CategoryModel model)
-        {
-            throw new NotImplementedException();
+            var entity = Mapper.Map<Category>(model);
+            entity.ModifiedBy = Thread.CurrentPrincipal.Identity.Name;
+            entity.ModifiedDate = DateTime.Now;
+            return _categoryRepository.UpdateCategoryById(entity);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace HHCoApps.Repository
             Bind<ISupplierRepository>().To<SupplierRepository>();
             Bind<IProductRepository>().To<ProductRepository>();
             Bind<IUserRepository>().To<UserRepository>();
+            Bind<ICategoryRepository>().To<CategoryRepository>();
         }
     }
 }

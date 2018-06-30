@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using HHCoApps.Core.EF;
@@ -28,6 +29,10 @@ namespace HHCoApps.Services.Implementation
         public int AddNewSupplier(SupplierModel model)
         {
             var entity = Mapper.Map<Supplier>(model);
+            entity.IsDeleted = false;
+            entity.IsActive = true;
+            entity.CreatedDate = DateTime.Now;
+            entity.Id = Guid.NewGuid();
             return _supplierRepository.AddNewSupplier(entity);
         }
 

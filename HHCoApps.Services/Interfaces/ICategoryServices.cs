@@ -11,8 +11,7 @@ namespace HHCoApps.Services.Interfaces
     {
         IEnumerable<CategoryModel> GetCategories();
         CategoryModel GetCategoryById(int categoryId);
-        bool CheckDuplicateCategory(string categoryName);
-        bool AddCategory(CategoryModel model);
-        bool UpdateCategory(CategoryModel model);
+        int AddCategory(CategoryModel model);
+        int UpdateCategory(CategoryModel model);
     }
 }

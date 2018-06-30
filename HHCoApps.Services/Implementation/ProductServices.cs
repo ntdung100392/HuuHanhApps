@@ -7,9 +7,8 @@ using Ninject;
 
 namespace HHCoApps.Services.Implementation
 {
-    public class ProductServices : IProductServices
+    internal class ProductServices : IProductServices
     {
-        [Inject]
         private ICategoryServices _categoryServices;
 
         public ProductServices(ICategoryServices categoryServices)

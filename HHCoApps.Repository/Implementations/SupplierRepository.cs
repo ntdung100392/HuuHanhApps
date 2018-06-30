@@ -10,7 +10,7 @@ namespace HHCoApps.Repository.Implementations
 {
     internal class SupplierRepository : ISupplierRepository
     {
-        private readonly string SQL_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HHCoApps"].ConnectionString;
+        private readonly string SQL_CONNECTION_STRING = "HHCoApps";
         private readonly string SUPPLIER_TABLE_NAME = "dbo.Suppliers";
 
         public IEnumerable<Supplier> GetSuppliers()
@@ -28,30 +28,23 @@ namespace HHCoApps.Repository.Implementations
 
         public int AddNewSupplier(Supplier model)
         {
-            var parameter = new
-            {
-                model.CompanyName,
-                model.Address,
-                model.DirectorName,
-                model.Email,
-                model.Fax,
-                model.HomeTown,
-                Id = Guid.NewGuid(),
-                IsActive = true,
-                model.Note,
-                model.Phone,
-                model.TaxCode,
-                IsDeleted = false,
-                CreatedDate = DateTime.Now,
-                CreatedBy = Thread.CurrentPrincipal.Identity.Name
-            };
+            if (string.IsNullOrEmpty(model.CompanyName))
+                throw new ArgumentNullException(nameof(model.CompanyName));
+
+            if (model.Id == null || model.Id == Guid.Empty)
+                throw new ArgumentNullException(nameof(model.Id));
 
             var keyName = new[]
             {
                 "CompanyName"
             };
 
-            return DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), model, keyName);
+
+            if (rowAffected < 1)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            return rowAffected;
         }
 
         public int UpdateSupplier(Supplier model)
@@ -84,7 +77,12 @@ namespace HHCoApps.Repository.Implementations
                 "Id"
             };
 
-            return DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+
+            if (rowAffected < 1)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            return rowAffected;
         }
 
         public int DeleteSupplier(Supplier model)
@@ -101,7 +99,12 @@ namespace HHCoApps.Repository.Implementations
                 "Id"
             };
 
-            return DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+
+            if (rowAffected < 1)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            return rowAffected;
         }
 
         internal Supplier GetSupplierByCompanyName(string companyName, IQueryable<Supplier> suppliers)

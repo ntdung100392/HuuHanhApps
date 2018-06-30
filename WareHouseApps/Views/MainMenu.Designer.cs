@@ -49,6 +49,7 @@
             this.groupBoxInformation = new System.Windows.Forms.GroupBox();
             this.lblDateTime = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.mainBindingSource)).BeginInit();
             this.groupBoxExit.SuspendLayout();
             this.groupBoxReport.SuspendLayout();
             this.groupBoxCategory.SuspendLayout();
@@ -222,6 +223,7 @@
             this.btnAddProduct.TabIndex = 5;
             this.btnAddProduct.Text = "Thêm Hàng Hóa";
             this.btnAddProduct.UseVisualStyleBackColor = true;
+            this.btnAddProduct.Click += new System.EventHandler(this.btnAddProduct_Click);
             // 
             // btnAddCategory
             // 
@@ -307,6 +309,7 @@
             this.MaximizeBox = false;
             this.Name = "MainMenu";
             this.Text = "Khung Điều Khiển";
+            ((System.ComponentModel.ISupportInitialize)(this.mainBindingSource)).EndInit();
             this.groupBoxExit.ResumeLayout(false);
             this.groupBoxReport.ResumeLayout(false);
             this.groupBoxCategory.ResumeLayout(false);
