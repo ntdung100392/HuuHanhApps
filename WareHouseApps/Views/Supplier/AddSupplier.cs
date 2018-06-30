@@ -22,7 +22,7 @@ namespace WareHouseApps
         public AddSupplier(ISupplierServices supplierServices)
         {
             InitializeComponent();
-            this.CenterToParent();
+            CenterToParent();
             this.supplierServices = supplierServices;
         }
 
@@ -30,24 +30,24 @@ namespace WareHouseApps
         {
             base.OnLoad(e);
 
-            txtCompany.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
+            txtCompany.Validating += this.TextBoxValidateNotEmpty;
 
-            txtDirector.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
+            txtDirector.Validating += this.TextBoxValidateNotEmpty;
 
-            txtAddress.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
+            txtAddress.Validating += this.TextBoxValidateNotEmpty;
 
-            txtTaxCode.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
-            txtTaxCode.KeyPress += new KeyPressEventHandler(this.NumericOnly);
+            txtTaxCode.Validating += this.TextBoxValidateNotEmpty;
+            txtTaxCode.KeyPress += this.NumericOnly;
 
-            txtPhone.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
-            txtPhone.KeyPress += new KeyPressEventHandler(this.NumericOnly);
+            txtPhone.Validating += this.TextBoxValidateNotEmpty;
+            txtPhone.KeyPress += this.NumericOnly;
 
-            txtFax.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
-            txtFax.KeyPress += new KeyPressEventHandler(this.NumericOnly);
+            txtFax.Validating += this.TextBoxValidateNotEmpty;
+            txtFax.KeyPress += this.NumericOnly;
 
-            txtHomeTown.Validating += new CancelEventHandler(this.TextBoxValidateNotEmpty);
+            txtHomeTown.Validating += this.TextBoxValidateNotEmpty;
 
-            this.FormClosing += new FormClosingEventHandler(this.PreventClosingFormWithErrorProvider);
+            this.FormClosing += this.PreventClosingFormWithErrorProvider;
         }
         #endregion
 
@@ -71,7 +71,7 @@ namespace WareHouseApps
                         Phone = txtPhone.Text.Trim(),
                         TaxCode = txtTaxCode.Text.Trim(),
                     };
-                    if (this.supplierServices.AddSupplier(Mapper.Map<SupplierModel>(viewModel)))
+                    if (supplierServices.AddNewSupplier(Mapper.Map<SupplierModel>(viewModel)) != 0)
                     {
                         if (this.YesNoDialog("Thành Công!", "Bạn có muốn tiếp tục không ?") == DialogResult.Yes)
                         {

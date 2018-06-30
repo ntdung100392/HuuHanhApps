@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using HHCoApps.Libs;
+﻿using HHCoApps.Libs;
 using HHCoApps.Services.Interfaces;
-using HHCoApps.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using WareHouseApps.Helper;
 using WareHouseApps.Models;
 
@@ -55,11 +49,11 @@ namespace WareHouseApps
                 cbxCategorySearch.DisplayMember = "Name";
                 cbxCategorySearch.ValueMember = "Id";
 
-                var supplierList = supplierServices.GetSuppliers().ToList();
-                cbxSupplier.DataSource = supplierList;
+                //var supplierList = supplierServices.GetSuppliers().ToList();
+                cbxSupplier.DataSource = null;
                 cbxSupplier.DisplayMember = "CompanyName";
                 cbxSupplier.ValueMember = "Id";
-                cbxSupplierSearch.DataSource = supplierList;
+                cbxSupplierSearch.DataSource = null;
                 cbxSupplierSearch.DisplayMember = "CompanyName";
                 cbxSupplierSearch.ValueMember = "Id";
 
@@ -76,13 +70,13 @@ namespace WareHouseApps
                 cbxStatus.DisplayMember = "Description";
                 cbxStatus.ValueMember = "value";
 
-                var result = productServices.GetProducts().ToList();
-                if (result != null)
-                {
-                    productList = result.ToList()
-                        .Select(p => Mapper.Map<ProductModel, ProductViewModel>(p)).ToList();
-                    mainBindingSource.DataSource = productList;
-                }
+                //var result = productServices.GetAllProductBySupplier().ToList();
+                //if (result != null)
+                //{
+                //    productList = result.ToList()
+                //        .Select(p => Mapper.Map<ProductModel, ProductViewModel>(p)).ToList();
+                //    mainBindingSource.DataSource = productList;
+                //}
             }
             catch (Exception ex)
             {

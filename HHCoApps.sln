@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WareHouseApps", "WareHouseA
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WareHouseHHCoLtd", "WareHouseHHCoLtd\WareHouseHHCoLtd.vdproj", "{6446E519-C572-4DCF-AA8C-F60C824BAAB7}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PublishDatabase", "PublishDatabase\PublishDatabase.sqlproj", "{A85076D5-40C1-47C1-9968-63CC322A7614}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,12 @@ Global
 		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Debug|Any CPU.ActiveCfg = Debug
 		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Release|Any CPU.ActiveCfg = Release
 		{6446E519-C572-4DCF-AA8C-F60C824BAAB7}.Release|Any CPU.Build.0 = Release
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A85076D5-40C1-47C1-9968-63CC322A7614}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

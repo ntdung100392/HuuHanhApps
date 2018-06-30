@@ -1,139 +1,181 @@
-﻿using AutoMapper;
+﻿using HHCoApps.Core;
 using HHCoApps.Core.EF;
+using HHCoApps.Services.DapperRepository;
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
-using HHCoApps.Services.Repos;
-using HHCoApps.Services.Repos.Impl;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
-using System.Transactions;
 
 namespace HHCoApps.Services.Implementation
 {
-    public class SupplierServices : BaseServices, ISupplierServices
+    public class SupplierServices : ISupplierServices
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// 
-        private IRepository<Supplier> supplierRepository;
-        public SupplierServices()
-        {
-            this.supplierRepository = new Repository<Supplier>(dbContext);
-        }
+        private readonly string SQL_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HHCoApps"].ConnectionString;
+        private readonly string SUPPLIER_TABLE_NAME = "dbo.Suppliers";
 
-        /// <summary>
-        /// Get Supplier
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<SupplierModel> GetSuppliers()
+        public IEnumerable<Supplier> GetSuppliers()
         {
-            try
+
+            using (var context = new HHCoAppsDBContext())
             {
-                var data = supplierRepository.GetAll().Where(s => !s.IsDeleted).OrderBy(s => s.CompanyName).ToList();
-                if (data.Count() > 0)
-                    return data.Select(s => Mapper.Map<Supplier, SupplierModel>(s));
-                else
-                    return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                return null;
+                return GetAllSuppliers(context.Suppliers).ToList();
             }
         }
 
-        /// <summary>
-        /// Add new Supplier
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public bool AddSupplier(SupplierModel model)
+        internal IEnumerable<Supplier> GetAllSuppliers(IQueryable<Supplier> suppliers)
         {
-            try
-            {
-                if (supplierRepository.GetAll().Where(s => s.CompanyName == model.CompanyName && s.IsActive).Count() == 0)
-                {
-                    Supplier entity = Mapper.Map<SupplierModel, Supplier>(model);
-                    entity.IsActive = true;
-                    entity.IsDeleted = false;
-                    supplierRepository.Insert(entity);
-                    SaveChanges();
-                    _logger.Info(
-                        string.Format("New Supplier has been added by {0}: {1}",
-                        Thread.CurrentPrincipal.Identity.Name, model.CompanyName));
-                    return true;
-                }
-                else
-                    return false;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                return false;
-            }
+            return suppliers.Where(s => !s.IsDeleted).OrderBy(s => s.CompanyName);
         }
 
-        /// <summary>
-        /// Update supplier
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public bool UpdateSupplier(SupplierModel model)
+        public int AddNewSupplier(SupplierModel model)
         {
-            try
+            var parameter = new
             {
-                var entity = supplierRepository.GetById(model.Id);
-                entity.IsActive = model.IsActive;
-                entity.Note = model.Note;
-                entity.TaxCode = model.TaxCode;
-                entity.HomeTown = model.HomeTown;
-                entity.Fax = model.Fax;
-                entity.Email = model.Email;
-                entity.DirectorName = model.DirectorName;
-                entity.CompanyName = model.CompanyName;
-                entity.Address = model.Address;
-                supplierRepository.Update(entity);
-                SaveChanges();
-                _logger.Info(string.Format("Supplier {0} has been updated by {1}", model.CompanyName, Thread.CurrentPrincipal.Identity.Name));
-                return true;
-            }
-            catch (Exception ex)
+                model.CompanyName,
+                model.Address,
+                model.DirectorName,
+                model.Email,
+                model.Fax,
+                model.HomeTown,
+                Id = Guid.NewGuid(),
+                IsActive = true,
+                model.Note,
+                model.Phone,
+                model.TaxCode,
+                IsDeleted = false,
+                CreatedDate = DateTime.Now,
+                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+            };
+
+            var keyName = new[]
             {
-                _logger.Error(ex.Message);
-                return false;
-            }
+                "CompanyName"
+            };
+
+            return DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
         }
 
-        /// <summary>
-        /// Delete supplier
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public bool DeleteSupplier(SupplierModel model)
+        public int UpdateSupplier(SupplierModel model)
         {
-            try
+            var parameter = new
             {
-                using (var scope = new TransactionScope())
-                {
-                    var entity = supplierRepository.GetById(model.Id);
-                    entity.IsActive = false;
-                    entity.IsDeleted = true;
-                    supplierRepository.Update(entity);
-                    this.SaveChanges();
-                    scope.Complete();
-                }
+                model.CompanyName,
+                model.Address,
+                model.DirectorName,
+                model.Email,
+                model.Fax,
+                model.HomeTown,
+                Id = Guid.NewGuid(),
+                model.IsActive,
+                model.Note,
+                model.Phone,
+                model.TaxCode,
+                ModifiedDate = DateTime.Now,
+                ModifiedBy = Thread.CurrentPrincipal.Identity.Name
+            };
 
-                _logger.Info(string.Format("Supplier {0} has been deleted by {1}", model.CompanyName, Thread.CurrentPrincipal.Identity.Name));
-                return true;
-            }
-            catch (TransactionException ex)
+            var keyName = new[]
             {
-                _logger.Error(ex.Message);
-                return false;
-            }
+                "CompanyName"
+            };
+
+            return DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
         }
+
+        public int DeleteSupplier(SupplierModel model)
+        {
+            var parameter = new
+            {
+                model.CompanyName,
+                model.Address,
+                model.DirectorName,
+                model.Email,
+                model.Fax,
+                model.HomeTown,
+                Id = Guid.NewGuid(),
+                IsActive = false,
+                model.Note,
+                model.Phone,
+                model.TaxCode,
+                IsDeleted = true,
+                ModifiedDate = DateTime.Now,
+                ModifiedBy = Thread.CurrentPrincipal.Identity.Name
+            };
+
+            var keyName = new[]
+            {
+                "CompanyName"
+            };
+
+            return DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+        }
+
+        internal Supplier GetSupplierByCompanyName(string companyName, IQueryable<Supplier> suppliers)
+        {
+            return suppliers.FirstOrDefault(s => s.CompanyName.Equals(companyName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        ///// <summary>
+        ///// Update supplier
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //public bool UpdateSupplier(SupplierModel model)
+        //{
+        //    try
+        //    {
+        //        var entity = supplierRepository.GetById(model.Id);
+        //        entity.IsActive = model.IsActive;
+        //        entity.Note = model.Note;
+        //        entity.TaxCode = model.TaxCode;
+        //        entity.HomeTown = model.HomeTown;
+        //        entity.Fax = model.Fax;
+        //        entity.Email = model.Email;
+        //        entity.DirectorName = model.DirectorName;
+        //        entity.CompanyName = model.CompanyName;
+        //        entity.Address = model.Address;
+        //        supplierRepository.Update(entity);
+        //        SaveChanges();
+        //        _logger.Info(string.Format("Supplier {0} has been updated by {1}", model.CompanyName, Thread.CurrentPrincipal.Identity.Name));
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.Error(ex.Message);
+        //        return false;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Delete supplier
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //public bool DeleteSupplier(SupplierModel model)
+        //{
+        //    try
+        //    {
+        //        using (var scope = new TransactionScope())
+        //        {
+        //            var entity = supplierRepository.GetById(model.Id);
+        //            entity.IsActive = false;
+        //            entity.IsDeleted = true;
+        //            supplierRepository.Update(entity);
+        //            this.SaveChanges();
+        //            scope.Complete();
+        //        }
+
+        //        _logger.Info(string.Format("Supplier {0} has been deleted by {1}", model.CompanyName, Thread.CurrentPrincipal.Identity.Name));
+        //        return true;
+        //    }
+        //    catch (TransactionException ex)
+        //    {
+        //        _logger.Error(ex.Message);
+        //        return false;
+        //    }
+        //}
     }
 }

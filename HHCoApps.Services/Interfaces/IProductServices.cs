@@ -8,6 +8,6 @@ namespace HHCoApps.Services.Interfaces
     public interface IProductServices
     {
         IEnumerable<Product> GetAllProductBySupplier(Guid supplierId);
-        IEnumerable<ProductModel> GetProducts();
+        IEnumerable<Product> GetProductsOrderByIssuedDate();
     }
 }

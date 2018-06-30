@@ -25,51 +25,7 @@ namespace HHCoApps.Core
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<User> Users { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //Configure domain classes using Fluent API here
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.Id);
-
-            modelBuilder.Entity<Log>()
-                .HasKey(l => l.Id);
-
-            modelBuilder.Entity<Customer>()
-                .HasKey<int>(l => l.Id);
-
-            modelBuilder.Entity<Supplier>()
-                .HasKey<Guid>(l => l.Id);
-
-            modelBuilder.Entity<Supplier>()
-                .HasMany<Product>(s => s.Products)
-                .WithRequired(p => p.Supplier)
-                .HasForeignKey<Guid>(p => p.SupplierId)
-                .WillCascadeOnDelete();
-
-            modelBuilder.Entity<Product>()
-                .HasKey<Guid>(l => l.Id);
-
-            modelBuilder.Entity<Product>()
-                .HasRequired(p => p.Supplier)
-                .WithMany(s => s.Products)
-                .HasForeignKey(p => p.SupplierId);
-
-            modelBuilder.Entity<Category>()
-                .HasKey<int>(l => l.Id);
-
-            modelBuilder.Entity<Category>()
-                .HasMany(pc => pc.Products)
-                .WithRequired(p => p.Category)
-                .HasForeignKey(p => p.CategoryId)
-                .WillCascadeOnDelete();
-        }
-
+        
         public override int SaveChanges()
         {
             var modifiedEntries = ChangeTracker.Entries()

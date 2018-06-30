@@ -49,7 +49,7 @@ namespace WareHouseApps
                 currentSupplier.Phone = txtPhone.Text;
                 currentSupplier.IsActive = cbxIsActive.Checked;
 
-                if (supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)))
+                if (supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
                 {
                     LoadSuppliers();
                     SuccessMessage();
@@ -68,7 +68,7 @@ namespace WareHouseApps
             {
                 try
                 {
-                    if (supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)))
+                    if (supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
                     {
                         LoadSuppliers();
                         currentSupplier = null;
@@ -105,12 +105,12 @@ namespace WareHouseApps
         {
             try
             {
-                var result = supplierServices.GetSuppliers();
-                if (result != null)
-                {
-                    supplierList = result.ToList()
-                        .Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
-                }
+                //var result = supplierServices.GetSuppliers();
+                //if (result != null)
+                //{
+                //    supplierList = result.ToList()
+                //        .Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
+                //}
 
                 supplierViewModelBindingSource.DataSource = supplierList;
             }
