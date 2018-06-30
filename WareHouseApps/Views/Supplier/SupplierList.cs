@@ -13,27 +13,24 @@ namespace WareHouseApps
 {
     public partial class SupplierList : BaseMethod
     {
-        private readonly ISupplierServices supplierServices;
+        private readonly ISupplierServices _supplierServices;
         private IList<SupplierViewModel> supplierList;
         private IList<SupplierViewModel> filterList;
         private SupplierViewModel currentSupplier;
 
         public SupplierList(ISupplierServices supplierServices)
         {
+            _supplierServices = supplierServices;
             InitializeComponent();
             CenterToParent();
-            this.supplierServices = supplierServices;
         }
 
-        #region Form Event
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             LoadSuppliers();
         }
-        #endregion
 
-        #region Control Event
         private void UpdateSupplier(object sender, EventArgs e)
         {
             if (YesNoDialog() == DialogResult.Yes)
@@ -49,7 +46,7 @@ namespace WareHouseApps
                 currentSupplier.Phone = txtPhone.Text;
                 currentSupplier.IsActive = cbxIsActive.Checked;
 
-                if (supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+                if (_supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
                 {
                     LoadSuppliers();
                     SuccessMessage();
@@ -68,7 +65,7 @@ namespace WareHouseApps
             {
                 try
                 {
-                    if (supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+                    if (_supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
                     {
                         LoadSuppliers();
                         currentSupplier = null;
@@ -91,8 +88,8 @@ namespace WareHouseApps
 
         private void LoadAddForm(object sender, EventArgs e)
         {
-            AddSupplier addSupplierForm = new AddSupplier(supplierServices);
-            addSupplierForm.FormClosed += new FormClosedEventHandler(AddSupplierFormClosed);
+            var addSupplierForm = new AddSupplier(_supplierServices);
+            addSupplierForm.FormClosed += AddSupplierFormClosed;
             addSupplierForm.ShowDialog();
         }
 
@@ -105,49 +102,58 @@ namespace WareHouseApps
         {
             try
             {
-                //var result = supplierServices.GetSuppliers();
-                //if (result != null)
-                //{
-                //    supplierList = result.ToList()
-                //        .Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
-                //}
+                var result = _supplierServices.GetSuppliers();
+                if (result .Any())
+                {
+                    supplierList = result.ToList().Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
+                }
 
                 supplierViewModelBindingSource.DataSource = supplierList;
             }
             catch(Exception ex)
             {
-                throw ex;
+                _logger.Error(ex.Message);
+                ErrorMessage();
             }
         }
 
         private void GetSupplierDetails(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                currentSupplier = supplierList[e.RowIndex];
-                txtAddress.Text = currentSupplier.Address;
-                txtCompany.Text = currentSupplier.CompanyName;
-                txtDirector.Text = currentSupplier.DirectorName;
-                txtEmail.Text = currentSupplier.Email;
-                txtFax.Text = currentSupplier.Fax;
-                txtHomeTown.Text = currentSupplier.HomeTown;
-                txtInformation.Text = currentSupplier.Note;
-                txtTaxCode.Text = currentSupplier.TaxCode;
-                txtPhone.Text = currentSupplier.Phone;
-                cbxIsActive.Checked = currentSupplier.IsActive;
+            if (e.RowIndex < 0) return;
 
-                btnUpdate.Enabled = true;
-                btnDelete.Enabled = true;
-            }
+            currentSupplier = supplierList[e.RowIndex];
+            txtAddress.Text = currentSupplier.Address;
+            txtCompany.Text = currentSupplier.CompanyName;
+            txtDirector.Text = currentSupplier.DirectorName;
+            txtEmail.Text = currentSupplier.Email;
+            txtFax.Text = currentSupplier.Fax;
+            txtHomeTown.Text = currentSupplier.HomeTown;
+            txtInformation.Text = currentSupplier.Note;
+            txtTaxCode.Text = currentSupplier.TaxCode;
+            txtPhone.Text = currentSupplier.Phone;
+            cbxIsActive.Checked = currentSupplier.IsActive;
+
+            txtAddress.Enabled = true;
+            txtCompany.Enabled = true;
+            txtDirector.Enabled = true;
+            txtEmail.Enabled = true;
+            txtFax.Enabled = true;
+            txtHomeTown.Enabled = true;
+            txtInformation.Enabled = true;
+            txtTaxCode.Enabled = true;
+            txtPhone.Enabled = true;
+            cbxIsActive.Enabled = true;
+
+            btnUpdate.Enabled = true;
+            btnDelete.Enabled = true;
         }
 
         private void SearchSupplier(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtSearch.Text.Trim()))
             {
-                string filter = txtSearch.Text.Trim();
-                filterList = supplierList.Where(s => s.CompanyName.Contains(filter)
-                    || s.DirectorName.Contains(filter)).ToList();
+                var filter = txtSearch.Text.Trim();
+                filterList = supplierList.Where(s => s.CompanyName.Contains(filter) || s.DirectorName.Contains(filter)).ToList();
                 supplierViewModelBindingSource.DataSource = filterList;
             }
             else
@@ -155,11 +161,20 @@ namespace WareHouseApps
                 supplierViewModelBindingSource.DataSource = supplierList;
             }
         }
-        #endregion
-
-        #region Private Method
+        
         private void ClearForm()
         {
+            txtAddress.Enabled = false;
+            txtCompany.Enabled = false;
+            txtDirector.Enabled = false;
+            txtEmail.Enabled = false;
+            txtFax.Enabled = false;
+            txtHomeTown.Enabled = false;
+            txtInformation.Enabled = false;
+            txtTaxCode.Enabled = false;
+            txtPhone.Enabled = false;
+            cbxIsActive.Enabled = false;
+
             txtAddress.Clear();
             txtCompany.Clear();
             txtDirector.Clear();
@@ -171,6 +186,5 @@ namespace WareHouseApps
             txtPhone.Clear();
             cbxIsActive.Checked = false;
         }
-        #endregion
     }
 }

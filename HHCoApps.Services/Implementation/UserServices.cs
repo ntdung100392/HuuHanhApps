@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using HHCoApps.Core.EF;
-using HHCoApps.Services.Interfaces;
+﻿using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
 using System;
-using System.Linq;
 
 namespace HHCoApps.Services.Implementation
 {

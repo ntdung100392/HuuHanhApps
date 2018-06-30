@@ -2,14 +2,8 @@
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Ninject;
 using WareHouseApps.Helper;
 using WareHouseApps.Models;
 
@@ -17,8 +11,9 @@ namespace WareHouseApps
 {
     public partial class AddSupplier : BaseMethod
     {
-        #region Constructor, Properties
+        [Inject]
         private readonly ISupplierServices supplierServices;
+
         public AddSupplier(ISupplierServices supplierServices)
         {
             InitializeComponent();
@@ -49,9 +44,7 @@ namespace WareHouseApps
 
             this.FormClosing += this.PreventClosingFormWithErrorProvider;
         }
-        #endregion
-
-        #region Control Event
+        
         private void AddNewSupplier(object sender, EventArgs e)
         {
             string errorMessage = string.Empty;
@@ -98,9 +91,7 @@ namespace WareHouseApps
                 this.ShowMessage(errorMessage);
             }
         }
-        #endregion
 
-        #region Private Method
         private bool FormValid(out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -121,6 +112,5 @@ namespace WareHouseApps
             txtPhone.Clear();
             txtTaxCode.Clear();
         }
-        #endregion
     }
 }

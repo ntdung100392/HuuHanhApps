@@ -329,6 +329,7 @@
             // 
             // txtFax
             // 
+            this.txtFax.Enabled = false;
             this.txtFax.Location = new System.Drawing.Point(117, 112);
             this.txtFax.MaxLength = 16;
             this.txtFax.Name = "txtFax";
@@ -337,6 +338,7 @@
             // 
             // txtHomeTown
             // 
+            this.txtHomeTown.Enabled = false;
             this.txtHomeTown.Location = new System.Drawing.Point(420, 60);
             this.txtHomeTown.Name = "txtHomeTown";
             this.txtHomeTown.Size = new System.Drawing.Size(138, 20);
@@ -363,6 +365,7 @@
             // 
             // txtInformation
             // 
+            this.txtInformation.Enabled = false;
             this.txtInformation.Location = new System.Drawing.Point(420, 112);
             this.txtInformation.Multiline = true;
             this.txtInformation.Name = "txtInformation";
@@ -371,6 +374,7 @@
             // 
             // txtTaxCode
             // 
+            this.txtTaxCode.Enabled = false;
             this.txtTaxCode.Location = new System.Drawing.Point(420, 34);
             this.txtTaxCode.MaxLength = 16;
             this.txtTaxCode.Name = "txtTaxCode";
@@ -443,6 +447,7 @@
             // cbxIsActive
             // 
             this.cbxIsActive.AutoSize = true;
+            this.cbxIsActive.Enabled = false;
             this.cbxIsActive.Location = new System.Drawing.Point(120, 164);
             this.cbxIsActive.Name = "cbxIsActive";
             this.cbxIsActive.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -475,6 +480,7 @@
             // 
             // txtAddress
             // 
+            this.txtAddress.Enabled = false;
             this.txtAddress.Location = new System.Drawing.Point(420, 86);
             this.txtAddress.MaxLength = 255;
             this.txtAddress.Name = "txtAddress";
@@ -483,6 +489,7 @@
             // 
             // txtEmail
             // 
+            this.txtEmail.Enabled = false;
             this.txtEmail.Location = new System.Drawing.Point(117, 138);
             this.txtEmail.MaxLength = 20;
             this.txtEmail.Name = "txtEmail";
@@ -491,6 +498,7 @@
             // 
             // txtPhone
             // 
+            this.txtPhone.Enabled = false;
             this.txtPhone.Location = new System.Drawing.Point(117, 86);
             this.txtPhone.MaxLength = 16;
             this.txtPhone.Name = "txtPhone";
@@ -499,6 +507,7 @@
             // 
             // txtDirector
             // 
+            this.txtDirector.Enabled = false;
             this.txtDirector.Location = new System.Drawing.Point(117, 60);
             this.txtDirector.MaxLength = 35;
             this.txtDirector.Name = "txtDirector";
@@ -507,6 +516,7 @@
             // 
             // txtCompany
             // 
+            this.txtCompany.Enabled = false;
             this.txtCompany.Location = new System.Drawing.Point(117, 34);
             this.txtCompany.MaxLength = 100;
             this.txtCompany.Name = "txtCompany";

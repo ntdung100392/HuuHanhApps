@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE048EAA-DCD3-4D17-BBB7-62B312C1D299}</ProjectGuid>
+    <ProjectGuid>{489BEFA8-5AF6-4D20-9E00-C2D6F082CFBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HHCoApps.Services</RootNamespace>
-    <AssemblyName>HHCoApps.Services</AssemblyName>
+    <RootNamespace>HHCoApps.Repository</RootNamespace>
+    <AssemblyName>HHCoApps.Repository</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -47,9 +46,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,34 +54,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\CategoryServices.cs" />
-    <Compile Include="Implementation\ProductServices.cs" />
-    <Compile Include="Implementation\SupplierServices.cs" />
-    <Compile Include="Implementation\UserServices.cs" />
-    <Compile Include="Interfaces\ICategoryServices.cs" />
-    <Compile Include="Interfaces\IProductServices.cs" />
-    <Compile Include="Interfaces\ISupplierServices.cs" />
-    <Compile Include="Interfaces\IUserServices.cs" />
-    <Compile Include="Models\CategoryModel.cs" />
-    <Compile Include="Models\ProductModel.cs" />
-    <Compile Include="Models\SupplierModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="NinjectBindingServices.cs" />
+    <Compile Include="Dapper\DapperRepositoryUtil.cs" />
+    <Compile Include="Implementations\ProductRepository.cs" />
+    <Compile Include="Implementations\SupplierRepository.cs" />
+    <Compile Include="Implementations\UserRepository.cs" />
+    <Compile Include="Interfaces\IProductRepository.cs" />
+    <Compile Include="Interfaces\ISupplierRepository.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="NinjectBindingRepositories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HHCoApps.Core\HHCoApps.Core.csproj">
       <Project>{25463BAC-208A-4308-ACC0-FA51BB1946CF}</Project>
       <Name>HHCoApps.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HHCoApps.Repository\HHCoApps.Repository.csproj">
-      <Project>{489befa8-5af6-4d20-9e00-c2d6f082cfbf}</Project>
-      <Name>HHCoApps.Repository</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

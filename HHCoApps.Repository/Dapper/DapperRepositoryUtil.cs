@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace HHCoApps.Services.DapperRepository
+namespace HHCoApps.Repository
 {
     internal class DapperRepositoryUtil
     {

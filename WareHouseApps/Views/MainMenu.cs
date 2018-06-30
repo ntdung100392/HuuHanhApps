@@ -1,12 +1,5 @@
 ﻿using HHCoApps.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WareHouseApps.Helper;
 
@@ -14,29 +7,23 @@ namespace WareHouseApps
 {
     public partial class MainMenu : BaseMethod
     {
-        private readonly ISupplierServices supplierServices;
-        private readonly ICategoryServices categoryServices;
-        private readonly IProductServices productServices;
-        public MainMenu(
-            ISupplierServices supplierServices, 
-            ICategoryServices categoryServices, 
-            IProductServices productServices
-            )
+        private readonly ISupplierServices _supplierServices;
+        private readonly ICategoryServices _categoryServices;
+        private readonly IProductServices _productServices;
+        public MainMenu(ISupplierServices supplierServices, ICategoryServices categoryServices, IProductServices productServices)
         {
             InitializeComponent();
             CenterToScreen();
-            this.supplierServices = supplierServices;
-            this.categoryServices = categoryServices;
-            this.productServices = productServices;
+            _supplierServices = supplierServices;
+            _categoryServices = categoryServices;
+            _productServices = productServices;
         }
-
-        #region Control Event
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            if (this.YesNoDialog("Xác Nhận!", "Bạn có muốn thoát ?") == DialogResult.Yes)
+            if (YesNoDialog("Xác Nhận!", "Bạn có muốn thoát ?") == DialogResult.Yes)
             {
-                this.Close();
+                Close();
             }
         }
 
@@ -48,13 +35,13 @@ namespace WareHouseApps
 
         private void LoadCategoryForm(object sender, EventArgs e)
         {
-            CategoryList categoryForm = new CategoryList(categoryServices);
+            CategoryList categoryForm = new CategoryList(_categoryServices);
             categoryForm.ShowDialog();
         }
 
         private void LoadProductForm(object sender, EventArgs e)
         {
-            ProductList productForm = new ProductList(categoryServices, supplierServices, productServices);
+            ProductList productForm = new ProductList(_categoryServices, _supplierServices, _productServices);
             productForm.ShowDialog();
         }
 
@@ -66,7 +53,7 @@ namespace WareHouseApps
 
         private void btnSupplier_Click(object sender, EventArgs e)
         {
-            SupplierList supplierForm = new SupplierList(supplierServices);
+            SupplierList supplierForm = new SupplierList(_supplierServices);
             supplierForm.ShowDialog();
         }
 
@@ -85,17 +72,15 @@ namespace WareHouseApps
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Timer timer = new Timer
+            var timer = new Timer
             {
                 Interval = 100,
                 Enabled = true
             };
-            timer.Tick += new EventHandler(TimerSetDate);
+            timer.Tick += TimerSetDate;
             timer.Start();
             lblVersion.Text = "Version: 1.0.0";
         }
-
-        #endregion
 
         private void TimerSetDate(object sender, EventArgs e)
         {
