@@ -12,13 +12,15 @@ namespace HHCoApps.Libs
 
     public enum ProductStatus
     {
-        [Description("Còn Hàng")]
+        [Description("Nhập Kho/Tồn Kho")]
         InStock = 0,
         [Description("Hết Hàng")]
         OutOfStock = 1,
-        [Description("Trả Hàng")]
-        Returned = 2,
-        [Description("Bảo Hành")]
-        InReserved = 3
+        [Description("Hết Hạn Bảo Hành")]
+        Expired = 2,
+        [Description("Ký Gửi")]
+        ForTrade = 3,
+        [Description("Dự Trữ Bảo Hành")]
+        InReserved = 4
     }
 }

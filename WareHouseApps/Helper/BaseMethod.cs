@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WareHouseApps.Models;
 
@@ -22,38 +17,32 @@ namespace WareHouseApps.Helper
         public BaseMethod()
         {
             InitializeComponent();
-            this.Icon = Properties.Resources.icon128x128;
+            Icon = Properties.Resources.icon128x128;
         }
 
-        #region Message Box Event
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
         }
 
-        public void ErrorMessage(string title = "Lỗi!",
-            string message = "Đã có lỗi xảy ra. Vui lòng thử lại.")
+        public void ErrorMessage(string title = "Lỗi!", string message = "Đã có lỗi xảy ra. Vui lòng thử lại.")
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public void SuccessMessage(string title = "Thành Công!",
-            string message = "Tác vụ thực hiện thành công.")
+        public void SuccessMessage(string title = "Thành Công!", string message = "Tác vụ thực hiện thành công.")
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public DialogResult YesNoDialog(string title = "Xác Nhận!",
-            string message = "Bạn có muốn thực hiện tác vụ này ?")
+        public DialogResult YesNoDialog(string title = "Xác Nhận!", string message = "Bạn có muốn thực hiện tác vụ này ?")
         {
             return MessageBox.Show(message, title, MessageBoxButtons.YesNo);
         }
-        #endregion
 
-        #region Event Args
         public void TextBoxValidateNotEmpty(object sender, CancelEventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
+            var textBox = (TextBox)sender;
             if (string.IsNullOrEmpty(textBox.Text.Trim()))
             {
                 errorTextBox.SetError(textBox, "Thông tin bắt buộc!");
@@ -71,53 +60,39 @@ namespace WareHouseApps.Helper
             {
                 e.Handled = true;
             }
-
-            //// only allow one decimal point
-            //if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            //{
-            //    e.Handled = true;
-            //}
         }
 
         public bool ValidEmailAddress(string emailAddress, out string errorMessage)
         {
-            //if (emailAddress.Length == 0)
-            //{
-            //    errorMessage = "e-mail address is required.";
-            //    return false;
-            //}
             errorMessage = string.Empty;
-            if (!string.IsNullOrEmpty(emailAddress))
-            {
-                if (emailAddress.IndexOf("@") > -1)
-                {
-                    if (emailAddress.IndexOf(".", emailAddress.IndexOf("@")) > emailAddress.IndexOf("@"))
-                    {
-                        return true;
-                    }
-                }
+            if (string.IsNullOrEmpty(emailAddress))
+                return true;
 
-                errorMessage = "Địa chỉ Email không chính xác. Vui lòng điền lại Email.\n" +
-                   "Ví dụ: 'someone@example.com' ";
-                return false;
+            if (emailAddress.IndexOf("@", StringComparison.OrdinalIgnoreCase) > -1)
+            {
+                if (emailAddress.IndexOf(".", emailAddress.IndexOf("@", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase) > emailAddress.IndexOf("@", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
             }
-            return true;
+
+            errorMessage = "Địa chỉ Email không chính xác. Vui lòng điền lại Email.\n" +
+                           "Ví dụ: 'aido@vidu.com' ";
+            return false;
         }
 
         public void PreventClosingFormWithErrorProvider(object sender, FormClosingEventArgs e)
         {
             e.Cancel = false;
         }
-        #endregion
 
         public void SetCurrentPrincipal(UserViewModel userModel)
         {
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
-            WindowsPrincipal myUser = (WindowsPrincipal)Thread.CurrentPrincipal;
-            GenericIdentity userIdentity = new GenericIdentity(string.Empty);
+            var myUser = (WindowsPrincipal)Thread.CurrentPrincipal;
+            var userIdentity = new GenericIdentity(string.Empty);
 
-            GenericPrincipal customPrincipal =
-                new GenericPrincipal(userIdentity, new string[] { string.Empty });
+            var customPrincipal = new GenericPrincipal(userIdentity, new[] { string.Empty });
             Thread.CurrentPrincipal = customPrincipal;
         }
 

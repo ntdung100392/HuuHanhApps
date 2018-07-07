@@ -10,8 +10,8 @@ namespace HHCoApps.Repository.Implementations
 {
     internal class SupplierRepository : ISupplierRepository
     {
-        private readonly string SQL_CONNECTION_STRING = "HHCoApps";
-        private readonly string SUPPLIER_TABLE_NAME = "dbo.Suppliers";
+        private const string SQL_CONNECTION_STRING = "HHCoApps";
+        private const string SUPPLIER_TABLE_NAME = "dbo.Suppliers";
 
         public IEnumerable<Supplier> GetSuppliers()
         {
@@ -77,7 +77,7 @@ namespace HHCoApps.Repository.Implementations
                 "Id"
             };
 
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
@@ -99,7 +99,7 @@ namespace HHCoApps.Repository.Implementations
                 "Id"
             };
 
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, SQL_CONNECTION_STRING, parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

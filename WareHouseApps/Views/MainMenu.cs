@@ -89,7 +89,7 @@ namespace WareHouseApps
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            var addProductForm = new AddProduct();
+            var addProductForm = new AddProduct(_productServices, _categoryServices, _supplierServices);
             addProductForm.ShowDialog();
         }
     }

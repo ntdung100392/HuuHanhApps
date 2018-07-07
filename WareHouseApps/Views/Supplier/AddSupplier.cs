@@ -12,43 +12,42 @@ namespace WareHouseApps
     public partial class AddSupplier : BaseMethod
     {
         [Inject]
-        private readonly ISupplierServices supplierServices;
+        private readonly ISupplierServices _supplierServices;
 
         public AddSupplier(ISupplierServices supplierServices)
         {
             InitializeComponent();
             CenterToParent();
-            this.supplierServices = supplierServices;
+            _supplierServices = supplierServices;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            txtCompany.Validating += this.TextBoxValidateNotEmpty;
+            txtCompany.Validating += TextBoxValidateNotEmpty;
 
-            txtDirector.Validating += this.TextBoxValidateNotEmpty;
+            txtDirector.Validating += TextBoxValidateNotEmpty;
 
-            txtAddress.Validating += this.TextBoxValidateNotEmpty;
+            txtAddress.Validating += TextBoxValidateNotEmpty;
 
-            txtTaxCode.Validating += this.TextBoxValidateNotEmpty;
-            txtTaxCode.KeyPress += this.NumericOnly;
+            txtTaxCode.Validating += TextBoxValidateNotEmpty;
+            txtTaxCode.KeyPress += NumericOnly;
 
-            txtPhone.Validating += this.TextBoxValidateNotEmpty;
-            txtPhone.KeyPress += this.NumericOnly;
+            txtPhone.Validating += TextBoxValidateNotEmpty;
+            txtPhone.KeyPress += NumericOnly;
 
-            txtFax.Validating += this.TextBoxValidateNotEmpty;
-            txtFax.KeyPress += this.NumericOnly;
+            txtFax.Validating += TextBoxValidateNotEmpty;
+            txtFax.KeyPress += NumericOnly;
 
-            txtHomeTown.Validating += this.TextBoxValidateNotEmpty;
+            txtHomeTown.Validating += TextBoxValidateNotEmpty;
 
-            this.FormClosing += this.PreventClosingFormWithErrorProvider;
+            FormClosing += PreventClosingFormWithErrorProvider;
         }
         
         private void AddNewSupplier(object sender, EventArgs e)
         {
-            string errorMessage = string.Empty;
-            if (FormValid(out errorMessage))
+            if (FormValid(out var errorMessage))
             {
                 try
                 {
@@ -64,40 +63,38 @@ namespace WareHouseApps
                         Phone = txtPhone.Text.Trim(),
                         TaxCode = txtTaxCode.Text.Trim(),
                     };
-                    if (supplierServices.AddNewSupplier(Mapper.Map<SupplierModel>(viewModel)) != 0)
+                    if (_supplierServices.AddNewSupplier(Mapper.Map<SupplierModel>(viewModel)) > 0)
                     {
-                        if (this.YesNoDialog("Thành Công!", "Bạn có muốn tiếp tục không ?") == DialogResult.Yes)
+                        if (YesNoDialog("Thành Công!", "Bạn có muốn tiếp tục không ?") == DialogResult.Yes)
                         {
-                            this.ClearForm();
+                            ClearForm();
                         }
                         else
                         {
-                            this.Close();
+                            Close();
                         }
                     }
                     else
                     {
-                        this.ErrorMessage("Lỗi!", "Nhà cung cấp này đã tồn tại trong hệ thống!");
+                        ErrorMessage("Lỗi!", "Nhà cung cấp này đã tồn tại trong hệ thống!");
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.Error(ex.Message);
-                    this.ErrorMessage();
+                    ErrorMessage();
                 }
             }
             else
             {
-                this.ShowMessage(errorMessage);
+                ErrorMessage(errorMessage);
             }
         }
 
         private bool FormValid(out string errorMessage)
         {
             errorMessage = string.Empty;
-            if (!ValidEmailAddress(txtEmail.Text.Trim(), out errorMessage))
-                return false;
-            return true;
+            return ValidEmailAddress(txtEmail.Text.Trim(), out errorMessage);
         }
         
         private void ClearForm()

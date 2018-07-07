@@ -33,23 +33,45 @@ namespace WareHouseApps
 
         private void UpdateSupplier(object sender, EventArgs e)
         {
-            if (YesNoDialog() == DialogResult.Yes)
-            {
-                currentSupplier.Address = txtAddress.Text;
-                currentSupplier.CompanyName = txtCompany.Text;
-                currentSupplier.DirectorName = txtDirector.Text;
-                currentSupplier.Email = txtEmail.Text;
-                currentSupplier.Fax = txtFax.Text;
-                currentSupplier.HomeTown = txtHomeTown.Text;
-                currentSupplier.Note = txtInformation.Text;
-                currentSupplier.TaxCode = txtTaxCode.Text;
-                currentSupplier.Phone = txtPhone.Text;
-                currentSupplier.IsActive = cbxIsActive.Checked;
+            if (YesNoDialog() != DialogResult.Yes)
+                return;
 
-                if (_supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+            currentSupplier.Address = txtAddress.Text;
+            currentSupplier.CompanyName = txtCompany.Text;
+            currentSupplier.DirectorName = txtDirector.Text;
+            currentSupplier.Email = txtEmail.Text;
+            currentSupplier.Fax = txtFax.Text;
+            currentSupplier.HomeTown = txtHomeTown.Text;
+            currentSupplier.Note = txtInformation.Text;
+            currentSupplier.TaxCode = txtTaxCode.Text;
+            currentSupplier.Phone = txtPhone.Text;
+            currentSupplier.IsActive = cbxIsActive.Checked;
+
+            if (_supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+            {
+                LoadSuppliers();
+                SuccessMessage();
+            }
+            else
+            {
+                LoadSuppliers();
+                ErrorMessage();
+            }
+        }
+
+        private void DeleteSupplier(object sender, EventArgs e)
+        {
+            if (YesNoDialog() != DialogResult.Yes)
+                return;
+
+            try
+            {
+                if (_supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
                 {
                     LoadSuppliers();
+                    currentSupplier = null;
                     SuccessMessage();
+                    ClearForm();
                 }
                 else
                 {
@@ -57,32 +79,10 @@ namespace WareHouseApps
                     ErrorMessage();
                 }
             }
-        }
-
-        private void DeleteSupplier(object sender, EventArgs e)
-        {
-            if (YesNoDialog() == DialogResult.Yes)
+            catch (Exception ex)
             {
-                try
-                {
-                    if (_supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
-                    {
-                        LoadSuppliers();
-                        currentSupplier = null;
-                        SuccessMessage();
-                        ClearForm();
-                    }
-                    else
-                    {
-                        LoadSuppliers();
-                        ErrorMessage();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex.Message);
-                    ErrorMessage();
-                }
+                _logger.Error(ex.Message);
+                ErrorMessage();
             }
         }
 
@@ -103,7 +103,7 @@ namespace WareHouseApps
             try
             {
                 var result = _supplierServices.GetSuppliers();
-                if (result .Any())
+                if (result.Any())
                 {
                     supplierList = result.ToList().Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
                 }
@@ -119,7 +119,8 @@ namespace WareHouseApps
 
         private void GetSupplierDetails(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0)
+                return;
 
             currentSupplier = supplierList[e.RowIndex];
             txtAddress.Text = currentSupplier.Address;

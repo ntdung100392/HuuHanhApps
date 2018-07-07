@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using AutoMapper;
 using HHCoApps.Core.EF;
 using HHCoApps.Repository;
@@ -12,12 +13,13 @@ namespace HHCoApps.Services.Implementation
 {
     internal class SupplierServices : ISupplierServices
     {
-        [Inject]
         private readonly ISupplierRepository _supplierRepository;
+        private readonly IProductRepository _productRepository;
 
-        public SupplierServices(ISupplierRepository supplierRepository)
+        public SupplierServices(ISupplierRepository supplierRepository, IProductRepository productRepository)
         {
             _supplierRepository = supplierRepository;
+            _productRepository = productRepository;
         }
 
         public IEnumerable<SupplierModel> GetSuppliers()
@@ -45,7 +47,20 @@ namespace HHCoApps.Services.Implementation
         public int DeleteSupplier(SupplierModel model)
         {
             var entity = Mapper.Map<Supplier>(model);
-            return _supplierRepository.DeleteSupplier(entity);
+            var supplierProducts = _productRepository.GetProductsBySupplierId(entity.Id);
+            int rowAffected;
+
+            using (var transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(1)))
+            {
+                if (supplierProducts.Any())
+                {
+                    _productRepository.DeleteProductsByUniqueIds(supplierProducts.Select(sp => sp.Id));
+                }
+                rowAffected = _supplierRepository.DeleteSupplier(entity);
+                transaction.Complete();
+            }
+
+            return rowAffected;
         }
     }
 }

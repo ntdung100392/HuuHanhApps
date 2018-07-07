@@ -1,7 +1,14 @@
-﻿namespace HHCoApps.Repository
+﻿using System;
+using System.Collections.Generic;
+using HHCoApps.Core.EF;
+
+namespace HHCoApps.Repository
 {
     public interface IProductRepository
     {
-        
+        IEnumerable<Product> GetProductsOrderByIssuedDate();
+        IEnumerable<Product> GetProductsBySupplierId(Guid supplierUniqueId);
+        int DeleteProductsByUniqueIds(IEnumerable<Guid> productUniqueIds);
+        IEnumerable<Product> GetProducts();
     }
 }

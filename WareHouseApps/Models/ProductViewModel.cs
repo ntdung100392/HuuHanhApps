@@ -15,14 +15,10 @@ namespace WareHouseApps.Models
         public string CategoryName { get; set; }
         public string SupplierName { get; set; }
         public int Status { get; set; }
-        public string StatusDisplay
-        {
-            get
-            {
-                return StringHelper.GetEnumDescription((ProductStatus)Status);
-            }
-        }
+        public decimal BasePrice { get; set; }
+        public string StatusDisplay => StringHelper.GetEnumDescription((ProductStatus)Status);
         public DateTime IssuedDate { get; set; }
+        public DateTime? ExpiredDate { get; set; }
         public int Stock { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }

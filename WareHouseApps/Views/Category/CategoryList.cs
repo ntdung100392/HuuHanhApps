@@ -89,7 +89,7 @@ namespace WareHouseApps
 
                 try
                 {
-                    if (_categoryServices.UpdateCategory(model))
+                    if (_categoryServices.UpdateCategory(model) > 0)
                     {
                         LoadData();
                         SuccessMessage();
