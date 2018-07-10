@@ -21,7 +21,7 @@ namespace HHCoApps.Repository.Implementations
             }
         }
 
-        internal IEnumerable<Supplier> GetAllSuppliers(IQueryable<Supplier> suppliers)
+        internal IQueryable<Supplier> GetAllSuppliers(IQueryable<Supplier> suppliers)
         {
             return suppliers.Where(s => !s.IsDeleted).OrderBy(s => s.CompanyName);
         }
@@ -39,7 +39,24 @@ namespace HHCoApps.Repository.Implementations
                 "CompanyName"
             };
 
-            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), model, keyName);
+            var parameter = new
+            {
+                model.CompanyName,
+                model.Address,
+                model.DirectorName,
+                model.Email,
+                model.Fax,
+                model.HomeTown,
+                model.Id,
+                model.IsActive,
+                model.Note,
+                model.Phone,
+                model.TaxCode,
+                CreatedDate = DateTime.Now,
+                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+            };
+
+            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

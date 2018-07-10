@@ -113,9 +113,9 @@ namespace WareHouseApps
 
         private void LoadAddProduct(object sender, EventArgs e)
         {
-            var addSupplierForm = new AddProduct(_productServices, _categoryServices, _supplierServices);
-            addSupplierForm.FormClosed += AddProductFormClosed;
-            addSupplierForm.ShowDialog();
+            var addProductForm = new AddProduct(_productServices, _categoryServices, _supplierServices);
+            addProductForm.FormClosed += AddProductFormClosed;
+            addProductForm.ShowDialog();
         }
 
         private void AddProductFormClosed(object sender, FormClosedEventArgs e)

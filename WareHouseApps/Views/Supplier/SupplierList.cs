@@ -105,7 +105,7 @@ namespace WareHouseApps
                 var result = _supplierServices.GetSuppliers();
                 if (result.Any())
                 {
-                    supplierList = result.ToList().Select(s => Mapper.Map<SupplierModel, SupplierViewModel>(s)).ToList();
+                    supplierList = result.ToList().Select(s => Mapper.Map<SupplierViewModel>(s)).ToList();
                 }
 
                 supplierViewModelBindingSource.DataSource = supplierList;

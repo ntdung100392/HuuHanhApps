@@ -33,16 +33,12 @@ namespace HHCoApps.Services.Implementation
         public int AddCategory(CategoryModel model)
         {
             var entity = Mapper.Map<Category>(model);
-            entity.CreatedBy = Thread.CurrentPrincipal.Identity.Name;
-            entity.CreatedDate = DateTime.Now;;
             return _categoryRepository.AddNewCategory(entity);
         }
 
         public int UpdateCategory(CategoryModel model)
         {
             var entity = Mapper.Map<Category>(model);
-            entity.ModifiedBy = Thread.CurrentPrincipal.Identity.Name;
-            entity.ModifiedDate = DateTime.Now;
             return _categoryRepository.UpdateCategoryById(entity);
         }
     }

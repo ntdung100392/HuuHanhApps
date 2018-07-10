@@ -10,5 +10,7 @@ namespace HHCoApps.Repository
         IEnumerable<Product> GetProductsBySupplierId(Guid supplierUniqueId);
         int DeleteProductsByUniqueIds(IEnumerable<Guid> productUniqueIds);
         IEnumerable<Product> GetProducts();
+        int AddProduct(Product model);
+        int UpdateProductByUniqueIds(Product model);
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using HHCoApps.Core.EF;
 
 namespace HHCoApps.Services.Implementation
 {
@@ -30,7 +31,14 @@ namespace HHCoApps.Services.Implementation
             return products.Any() ? products.Select(Mapper.Map<ProductModel>).ToList() : Enumerable.Empty<ProductModel>();
         }
 
-        public string CalculateProductCode()
+        public int AddNewProduct(ProductModel model)
+        {
+            var entity = Mapper.Map<Product>(model);
+            model.ProductCode = CalculateProductCode();
+            return _productRepository.AddProduct(entity);
+        }
+
+        private string CalculateProductCode()
         {
             var products = _productRepository.GetProducts();
             if (!products.Any())

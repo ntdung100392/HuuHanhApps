@@ -33,7 +33,6 @@ namespace HHCoApps.Services.Implementation
             var entity = Mapper.Map<Supplier>(model);
             entity.IsDeleted = false;
             entity.IsActive = true;
-            entity.CreatedDate = DateTime.Now;
             entity.Id = Guid.NewGuid();
             return _supplierRepository.AddNewSupplier(entity);
         }

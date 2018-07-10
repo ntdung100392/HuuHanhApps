@@ -148,7 +148,6 @@
             // 
             // cbxCategory
             // 
-            this.cbxCategory.Enabled = false;
             this.cbxCategory.FormattingEnabled = true;
             this.cbxCategory.Location = new System.Drawing.Point(357, 45);
             this.cbxCategory.Name = "cbxCategory";

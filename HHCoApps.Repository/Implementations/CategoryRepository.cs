@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using HHCoApps.Core;
 using HHCoApps.Core.EF;
 
@@ -19,7 +20,7 @@ namespace HHCoApps.Repository.Implementations
             }
         }
 
-        internal IEnumerable<Category> GetCategories(IQueryable<Category> categories)
+        internal IQueryable<Category> GetCategories(IQueryable<Category> categories)
         {
             return categories.OrderBy(c => c.Code);
         }
@@ -49,7 +50,15 @@ namespace HHCoApps.Repository.Implementations
             {
                 "Name"
             };
-            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), entity, keyName);
+            var parameters = new
+            {
+                entity.Code,
+                entity.Name,
+                CreatedDate = DateTime.Now,
+                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+            };
+
+            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
 
             if(rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
@@ -69,8 +78,15 @@ namespace HHCoApps.Repository.Implementations
             {
                 "Id"
             };
+            var parameters = new
+            {
+                entity.Code,
+                entity.Name,
+                ModifiedBy = DateTime.Now,
+                ModifiedDate = Thread.CurrentPrincipal.Identity.Name
+            };
 
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), entity, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

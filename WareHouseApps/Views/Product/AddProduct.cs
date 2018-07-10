@@ -7,9 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AutoMapper;
 using HHCoApps.Libs;
 using HHCoApps.Services.Interfaces;
+using HHCoApps.Services.Models;
 using WareHouseApps.Helper;
+using WareHouseApps.Models;
 
 namespace WareHouseApps
 {
@@ -35,8 +38,6 @@ namespace WareHouseApps
 
             txtName.Validating += TextBoxValidateNotEmpty;
 
-            txtCode.Validating += TextBoxValidateNotEmpty;
-
             txtBaseCost.Validating += TextBoxValidateNotEmpty;
             txtBaseCost.KeyPress += NumericOnly;
 
@@ -50,8 +51,10 @@ namespace WareHouseApps
         {
             dtPickerIssuedDate.MinDate = new DateTime(DateTime.Now.Year, 1, 1);
             dtPickerIssuedDate.MaxDate = new DateTime(DateTime.Now.Year, 12, 31);
+            dtPickerIssuedDate.Value = DateTime.Now;
 
             dtPickerExpiredDate.MinDate = dtPickerIssuedDate.Value.AddDays(1);
+            dtPickerExpiredDate.Value = dtPickerIssuedDate.Value.AddDays(2);
 
             var categoryList = _categoryServices.GetCategories().ToList();
             cbxCategory.DataSource = categoryList;
@@ -66,7 +69,8 @@ namespace WareHouseApps
             cbxStatus.DataSource = Enum.GetValues(typeof(ProductStatus)).Cast<Enum>()
                 .Select(value => new
                 {
-                    (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description, value
+                    (Attribute.GetCustomAttribute(value.GetType().GetField(value.ToString()), typeof(DescriptionAttribute)) as DescriptionAttribute).Description,
+                    value
                 })
                 .OrderBy(item => item.value).ToList();
 
@@ -81,26 +85,55 @@ namespace WareHouseApps
 
         private void AddNewProduct(object sender, EventArgs e)
         {
-
-        }
-
-        private bool FormValid(out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            return true;
+            var viewModel = new ProductModel
+            {
+                BasePrice = Convert.ToDecimal(txtBaseCost.Text),
+                CategoryId = (int)cbxCategory.SelectedValue,
+                SupplierId = Guid.Parse(cbxSupplier.SelectedValue.ToString()),
+                Stock = Convert.ToInt32(txtStock.Text),
+                Name = txtName.Text,
+                IssuedDate = dtPickerIssuedDate.Value,
+                ExpiredDate = dtPickerExpiredDate.Value,
+                Status = (int)cbxStatus.SelectedValue
+            };
+            try
+            {
+                if (_productServices.AddNewProduct(Mapper.Map<ProductModel>(viewModel)) > 0)
+                {
+                    if (YesNoDialog("Thành Công!", "Bạn có muốn tiếp tục không ?") == DialogResult.Yes)
+                    {
+                        ClearForm();
+                    }
+                    else
+                    {
+                        Close();
+                    }
+                }
+                else
+                {
+                    ErrorMessage("Lỗi!", "Mặt hàng này đã tồn tại trong hệ thống!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                ErrorMessage();
+            }
         }
 
         private void ClearForm()
         {
-            //txtDirector.Clear();
-            //txtAddress.Clear();
-            //txtCompany.Clear();
-            //txtFax.Clear();
-            //txtEmail.Clear();
-            //txtHomeTown.Clear();
-            //txtInformation.Clear();
-            //txtPhone.Clear();
-            //txtTaxCode.Clear();
+            txtName.Clear();
+            txtBaseCost.Clear();
+            txtCode.Clear();
+            txtStock.Clear();
+
+            dtPickerIssuedDate.MinDate = new DateTime(DateTime.Now.Year, 1, 1);
+            dtPickerIssuedDate.MaxDate = new DateTime(DateTime.Now.Year, 12, 31);
+            dtPickerIssuedDate.Value = DateTime.Now;
+
+            dtPickerExpiredDate.MinDate = dtPickerIssuedDate.Value.AddDays(1);
+            dtPickerExpiredDate.Value = dtPickerIssuedDate.Value.AddDays(2);
         }
     }
 }

@@ -51,20 +51,74 @@ namespace HHCoApps.Repository.Implementations
             return products.Where(p => !p.IsDeleted);
         }
 
-        public int AddProduct(Product model)
+        public int AddProduct(Product entity)
         {
-            if (string.IsNullOrEmpty(model.Name))
-                throw new ArgumentNullException(nameof(model.Name));
+            if (string.IsNullOrEmpty(entity.Name))
+                throw new ArgumentNullException(nameof(entity.Name));
 
-            if (model.Id == null || model.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(model.Id));
+            if (entity.Id == null || entity.Id == Guid.Empty)
+                throw new ArgumentNullException(nameof(entity.Id));
 
             var keyName = new[]
             {
                 "Name"
             };
+            var parameters = new
+            {
+                entity.BasePrice,
+                entity.CategoryId,
+                entity.ExpiredDate,
+                entity.IssuedDate,
+                entity.IsActive,
+                entity.IsDeleted,
+                entity.Name,
+                entity.ProductCode,
+                entity.Status,
+                entity.Stock,
+                entity.SupplierId,
+                CreatedDate = DateTime.Now,
+                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+            };
 
-            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), model, keyName);
+            var rowAffected = DapperRepositoryUtil.InsertIfNotExist(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
+
+            if (rowAffected < 1)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            return rowAffected;
+        }
+
+        public int UpdateProductByUniqueIds(Product entity)
+        {
+            if (string.IsNullOrEmpty(entity.Name))
+                throw new ArgumentNullException(nameof(entity.Name));
+
+            if (entity.Id == null || entity.Id == Guid.Empty)
+                throw new ArgumentNullException(nameof(entity.Id));
+
+            var keyName = new[]
+            {
+                "Id"
+            };
+
+            var parameters = new
+            {
+                entity.BasePrice,
+                entity.CategoryId,
+                entity.ExpiredDate,
+                entity.IssuedDate,
+                entity.IsActive,
+                entity.IsDeleted,
+                entity.Name,
+                entity.ProductCode,
+                entity.Status,
+                entity.Stock,
+                entity.SupplierId,
+                ModifiedDate = DateTime.Now,
+                ModifiedBy = Thread.CurrentPrincipal.Identity.Name
+            };
+
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
@@ -74,6 +128,9 @@ namespace HHCoApps.Repository.Implementations
 
         public int DeleteProductsByUniqueIds(IEnumerable<Guid> productUniqueIds)
         {
+            if (!productUniqueIds.Any())
+                throw new ArgumentNullException(nameof(productUniqueIds));
+
             var parameter = new
             {
                 ProductCode = string.Empty,
