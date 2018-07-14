@@ -34,8 +34,16 @@ namespace HHCoApps.Services.Implementation
         public int AddNewProduct(ProductModel model)
         {
             var entity = Mapper.Map<Product>(model);
-            model.ProductCode = CalculateProductCode();
+            entity.ProductCode = CalculateProductCode();
+            entity.Id = Guid.NewGuid();
+            entity.IsActive = true;
             return _productRepository.AddProduct(entity);
+        }
+
+        public int UpdateProductByUniqueId(ProductModel model)
+        {
+            var entity = Mapper.Map<Product>(model);
+            return _productRepository.UpdateProductByUniqueId(entity);
         }
 
         private string CalculateProductCode()

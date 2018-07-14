@@ -1,4 +1,6 @@
-﻿namespace WareHouseApps
+﻿using System.Windows.Forms;
+
+namespace WareHouseApps
 {
     partial class ProductList
     {
@@ -29,6 +31,8 @@
         private void InitializeComponent()
         {
             this.grBoxProduct = new System.Windows.Forms.GroupBox();
+            this.dtPickerExpiredDate = new System.Windows.Forms.DateTimePicker();
+            this.lblExpiredDate = new System.Windows.Forms.Label();
             this.txtBaseCost = new System.Windows.Forms.TextBox();
             this.lblBaseCost = new System.Windows.Forms.Label();
             this.cbxIsActive = new System.Windows.Forms.CheckBox();
@@ -68,8 +72,7 @@
             this.statusDisplayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.issuedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stockDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dtPickerExpiredDate = new System.Windows.Forms.DateTimePicker();
-            this.lblExpiredDate = new System.Windows.Forms.Label();
+            this.btnUpdate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainBindingSource)).BeginInit();
             this.grBoxProduct.SuspendLayout();
             this.grBoxSearch.SuspendLayout();
@@ -85,6 +88,7 @@
             this.grBoxProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grBoxProduct.Controls.Add(this.btnUpdate);
             this.grBoxProduct.Controls.Add(this.dtPickerExpiredDate);
             this.grBoxProduct.Controls.Add(this.lblExpiredDate);
             this.grBoxProduct.Controls.Add(this.txtBaseCost);
@@ -113,6 +117,26 @@
             this.grBoxProduct.TabIndex = 0;
             this.grBoxProduct.TabStop = false;
             this.grBoxProduct.Text = "Danh Sách";
+            // 
+            // dtPickerExpiredDate
+            // 
+            this.dtPickerExpiredDate.CustomFormat = "dd/MM/yyyy";
+            this.dtPickerExpiredDate.Enabled = false;
+            this.dtPickerExpiredDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtPickerExpiredDate.Location = new System.Drawing.Point(347, 70);
+            this.dtPickerExpiredDate.MinDate = new System.DateTime(1999, 1, 1, 0, 0, 0, 0);
+            this.dtPickerExpiredDate.Name = "dtPickerExpiredDate";
+            this.dtPickerExpiredDate.Size = new System.Drawing.Size(121, 20);
+            this.dtPickerExpiredDate.TabIndex = 21;
+            // 
+            // lblExpiredDate
+            // 
+            this.lblExpiredDate.AutoSize = true;
+            this.lblExpiredDate.Location = new System.Drawing.Point(263, 76);
+            this.lblExpiredDate.Name = "lblExpiredDate";
+            this.lblExpiredDate.Size = new System.Drawing.Size(78, 13);
+            this.lblExpiredDate.TabIndex = 20;
+            this.lblExpiredDate.Text = "Hạn Bảo Hành";
             // 
             // txtBaseCost
             // 
@@ -146,7 +170,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(347, 149);
+            this.btnAdd.Location = new System.Drawing.Point(220, 148);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(121, 23);
             this.btnAdd.TabIndex = 12;
@@ -190,6 +214,7 @@
             this.cbxCategorySearch.Location = new System.Drawing.Point(6, 123);
             this.cbxCategorySearch.Name = "cbxCategorySearch";
             this.cbxCategorySearch.Size = new System.Drawing.Size(129, 21);
+            this.cbxCategorySearch.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxCategorySearch.TabIndex = 11;
             // 
             // btnSearch
@@ -217,6 +242,7 @@
             this.cbxSupplierSearch.Location = new System.Drawing.Point(141, 79);
             this.cbxSupplierSearch.Name = "cbxSupplierSearch";
             this.cbxSupplierSearch.Size = new System.Drawing.Size(167, 21);
+            this.cbxSupplierSearch.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxSupplierSearch.TabIndex = 7;
             // 
             // lblSupplierSearch
@@ -308,6 +334,7 @@
             this.cbxCategory.Location = new System.Drawing.Point(347, 43);
             this.cbxCategory.Name = "cbxCategory";
             this.cbxCategory.Size = new System.Drawing.Size(121, 21);
+            this.cbxCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxCategory.TabIndex = 13;
             // 
             // lblCategory
@@ -344,6 +371,7 @@
             this.cbxSupplier.Location = new System.Drawing.Point(91, 97);
             this.cbxSupplier.Name = "cbxSupplier";
             this.cbxSupplier.Size = new System.Drawing.Size(139, 21);
+            this.cbxSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxSupplier.TabIndex = 9;
             // 
             // lblSupplier
@@ -493,25 +521,15 @@
             this.stockDataGridViewTextBoxColumn.Name = "stockDataGridViewTextBoxColumn";
             this.stockDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // dtPickerExpiredDate
+            // btnUpdate
             // 
-            this.dtPickerExpiredDate.CustomFormat = "dd/MM/yyyy";
-            this.dtPickerExpiredDate.Enabled = false;
-            this.dtPickerExpiredDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtPickerExpiredDate.Location = new System.Drawing.Point(347, 70);
-            this.dtPickerExpiredDate.MinDate = new System.DateTime(1999, 1, 1, 0, 0, 0, 0);
-            this.dtPickerExpiredDate.Name = "dtPickerExpiredDate";
-            this.dtPickerExpiredDate.Size = new System.Drawing.Size(121, 20);
-            this.dtPickerExpiredDate.TabIndex = 21;
-            // 
-            // lblExpiredDate
-            // 
-            this.lblExpiredDate.AutoSize = true;
-            this.lblExpiredDate.Location = new System.Drawing.Point(263, 76);
-            this.lblExpiredDate.Name = "lblExpiredDate";
-            this.lblExpiredDate.Size = new System.Drawing.Size(78, 13);
-            this.lblExpiredDate.TabIndex = 20;
-            this.lblExpiredDate.Text = "Hạn Bảo Hành";
+            this.btnUpdate.Location = new System.Drawing.Point(347, 148);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(121, 23);
+            this.btnUpdate.TabIndex = 22;
+            this.btnUpdate.Text = "Cập Nhật";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.UpdateProduct);
             // 
             // ProductList
             // 
@@ -580,5 +598,6 @@
         private System.Windows.Forms.Label lblBaseCost;
         private System.Windows.Forms.DateTimePicker dtPickerExpiredDate;
         private System.Windows.Forms.Label lblExpiredDate;
+        private System.Windows.Forms.Button btnUpdate;
     }
 }

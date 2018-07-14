@@ -102,11 +102,12 @@ namespace HHCoApps.Repository.Implementations
             return rowAffected;
         }
 
-        public int DeleteSupplier(Supplier model)
+        public int DeleteSupplier(Supplier entity)
         {
             var parameter = new
             {
                 IsDeleted = true,
+                entity.Id,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = Thread.CurrentPrincipal.Identity.Name
             };

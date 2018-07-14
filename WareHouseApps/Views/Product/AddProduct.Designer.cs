@@ -1,4 +1,6 @@
-﻿namespace WareHouseApps
+﻿using System.Windows.Forms;
+
+namespace WareHouseApps
 {
     partial class AddProduct
     {
@@ -96,7 +98,7 @@
             // txtBaseCost
             // 
             this.txtBaseCost.Location = new System.Drawing.Point(101, 45);
-            this.txtBaseCost.MaxLength = 4;
+            this.txtBaseCost.MaxLength = 10;
             this.txtBaseCost.Name = "txtBaseCost";
             this.txtBaseCost.Size = new System.Drawing.Size(139, 20);
             this.txtBaseCost.TabIndex = 33;
@@ -152,6 +154,7 @@
             this.cbxCategory.Location = new System.Drawing.Point(357, 45);
             this.cbxCategory.Name = "cbxCategory";
             this.cbxCategory.Size = new System.Drawing.Size(152, 21);
+            this.cbxCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxCategory.TabIndex = 27;
             // 
             // lblCategory
@@ -186,6 +189,7 @@
             this.cbxSupplier.Location = new System.Drawing.Point(101, 99);
             this.cbxSupplier.Name = "cbxSupplier";
             this.cbxSupplier.Size = new System.Drawing.Size(139, 21);
+            this.cbxSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cbxSupplier.TabIndex = 23;
             // 
             // lblSupplier

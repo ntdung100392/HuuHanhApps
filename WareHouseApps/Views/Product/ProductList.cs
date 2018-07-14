@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using AutoMapper;
+using HHCoApps.Services.Models;
 using WareHouseApps.Helper;
 using WareHouseApps.Models;
 
@@ -19,11 +20,8 @@ namespace WareHouseApps
         private readonly IProductServices _productServices;
         private IList<ProductViewModel> _productList;
         private ProductViewModel _currentProduct;
-        public ProductList(
-            ICategoryServices categoryServices,
-            ISupplierServices supplierServices,
-            IProductServices productServices
-            )
+
+        public ProductList(ICategoryServices categoryServices, ISupplierServices supplierServices, IProductServices productServices)
         {
             _categoryServices = categoryServices;
             _supplierServices = supplierServices;
@@ -37,6 +35,14 @@ namespace WareHouseApps
             base.OnLoad(e);
             LoadData();
             LoadProducts();
+
+            txtName.Validating += TextBoxValidateNotEmpty;
+
+            txtBaseCost.Validating += TextBoxValidateNotEmpty;
+            txtBaseCost.KeyPress += NumericOnly;
+
+            txtStock.Validating += TextBoxValidateNotEmpty;
+            txtStock.KeyPress += NumericOnly;
         }
 
         private void LoadData()
@@ -93,7 +99,7 @@ namespace WareHouseApps
                 var result = _productServices.GetProductsOrderByIssuedDate();
                 if (result.Any())
                 {
-                    _productList = result.ToList().Select(Mapper.Map<ProductViewModel>).ToList();
+                    _productList = result.Select(Mapper.Map<ProductViewModel>).ToList();
                 }
 
                 dataGridProducts.DataSource = _productList;
@@ -137,6 +143,7 @@ namespace WareHouseApps
             cbxCategory.Text = _currentProduct.CategoryName;
             cbxSupplier.Text = _currentProduct.SupplierName;
             cbxIsActive.Checked = _currentProduct.IsActive;
+            cbxStatus.Text = _currentProduct.StatusDisplay;
 
             dtPickerIssuedDate.Value = _currentProduct.IssuedDate;
             dtPickerExpiredDate.Value = _currentProduct.ExpiredDate ?? new DateTime(DateTime.Now.Year, 12, 31);
@@ -148,10 +155,45 @@ namespace WareHouseApps
 
             cbxCategory.Enabled = true;
             cbxSupplier.Enabled = true;
-            cbxIsActive.Checked = _currentProduct.IsActive;
+            cbxIsActive.Enabled = true;
+            cbxStatus.Enabled = true;
 
             dtPickerIssuedDate.Enabled = true;
             dtPickerExpiredDate.Enabled = true;
+        }
+
+        private void UpdateProduct(object sender, EventArgs e)
+        {
+            if (YesNoDialog("Thông Báo!", "Bạn có muốn tiếp tục không ?") != DialogResult.Yes)
+                return;
+
+            try
+            {
+                _currentProduct.BasePrice = Convert.ToDecimal(txtBaseCost.Text);
+                _currentProduct.CategoryId = (int)cbxCategory.SelectedValue;
+                _currentProduct.SupplierId = Guid.Parse(cbxSupplier.SelectedValue.ToString());
+                _currentProduct.Stock = Convert.ToInt32(txtStock.Text);
+                _currentProduct.Name = txtName.Text;
+                _currentProduct.IssuedDate = dtPickerIssuedDate.Value;
+                _currentProduct.ExpiredDate = dtPickerExpiredDate.Value;
+                _currentProduct.Status = (int)cbxStatus.SelectedValue;
+                _currentProduct.IsActive = cbxIsActive.Checked;
+                var model = Mapper.Map<ProductModel>(_currentProduct);
+
+                if (_productServices.UpdateProductByUniqueId(model) > 0)
+                {
+                    SuccessMessage();
+                }
+                else
+                {
+                    ErrorMessage();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                ErrorMessage();
+            }
         }
     }
 }

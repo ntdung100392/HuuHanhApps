@@ -2,6 +2,7 @@
 using HHCoApps.Core.EF;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 
@@ -22,7 +23,7 @@ namespace HHCoApps.Repository.Implementations
 
         internal IQueryable<Product> GetProductsOrderByIssuedDate(IQueryable<Product> products)
         {
-            return products.Where(p => p.IsActive && !p.IsDeleted).OrderByDescending(p => p.IssuedDate);
+            return products.Where(p => !p.IsDeleted).OrderByDescending(p => p.IssuedDate).Include(p => p.Supplier).Include(p => p.Category);
         }
 
         public IEnumerable<Product> GetProductsBySupplierId(Guid supplierUniqueId)
@@ -88,7 +89,7 @@ namespace HHCoApps.Repository.Implementations
             return rowAffected;
         }
 
-        public int UpdateProductByUniqueIds(Product entity)
+        public int UpdateProductByUniqueId(Product entity)
         {
             if (string.IsNullOrEmpty(entity.Name))
                 throw new ArgumentNullException(nameof(entity.Name));
@@ -108,12 +109,12 @@ namespace HHCoApps.Repository.Implementations
                 entity.ExpiredDate,
                 entity.IssuedDate,
                 entity.IsActive,
-                entity.IsDeleted,
                 entity.Name,
                 entity.ProductCode,
                 entity.Status,
                 entity.Stock,
                 entity.SupplierId,
+                entity.Id,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = Thread.CurrentPrincipal.Identity.Name
             };
@@ -140,9 +141,11 @@ namespace HHCoApps.Repository.Implementations
                 ModifiedBy = Thread.CurrentPrincipal.Identity.Name
             };
 
-            var keyName = productUniqueIds.Select(x => x.ToString());
-
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
+            var rowAffected = 0;
+            foreach (var productUniqueId in productUniqueIds)
+            {
+                rowAffected =+ DapperRepositoryUtil.UpdateRecordInTable(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), "Id", productUniqueId, parameter);
+            }
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

@@ -12,7 +12,9 @@ namespace WareHouseApps.Models
         public Guid Id { get; set; }
         public string ProductCode { get; set; }
         public string Name { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public Guid SupplierId { get; set; }
         public string SupplierName { get; set; }
         public int Status { get; set; }
         public decimal BasePrice { get; set; }

@@ -60,6 +60,7 @@ namespace WareHouseApps
             cbxCategory.DataSource = categoryList;
             cbxCategory.DisplayMember = "Name";
             cbxCategory.ValueMember = "Id";
+            cbxCategory.DropDownStyle = ComboBoxStyle.DropDownList;
 
             var supplierList = _supplierServices.GetSuppliers().ToList();
             cbxSupplier.DataSource = supplierList;

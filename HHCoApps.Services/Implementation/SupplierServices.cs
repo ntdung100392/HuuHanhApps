@@ -53,9 +53,9 @@ namespace HHCoApps.Services.Implementation
             {
                 if (supplierProducts.Any())
                 {
-                    _productRepository.DeleteProductsByUniqueIds(supplierProducts.Select(sp => sp.Id));
+                    rowAffected = _productRepository.DeleteProductsByUniqueIds(supplierProducts.Select(sp => sp.Id));
                 }
-                rowAffected = _supplierRepository.DeleteSupplier(entity);
+                rowAffected =+ _supplierRepository.DeleteSupplier(entity);
                 transaction.Complete();
             }
 
