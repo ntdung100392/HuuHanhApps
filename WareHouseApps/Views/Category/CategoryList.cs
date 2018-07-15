@@ -34,7 +34,7 @@ namespace WareHouseApps
             var result = _categoryServices.GetCategories();
             if (result.Any())
             {
-                _categoryList = result.Select(c => Mapper.Map<CategoryViewModel>(c)).OrderBy(c => c.Code).ToList();
+                _categoryList = result.Select(Mapper.Map<CategoryViewModel>).OrderBy(c => c.Code).ToList();
             }
             categoryViewModelBindingSource.DataSource = _categoryList;
         }
@@ -118,9 +118,6 @@ namespace WareHouseApps
 
             var categoryName = string.Empty;
             var splitNameResult = txtName.Text.Trim().Split();
-
-            if (splitNameResult.Length <= 1)
-                return;
 
             var lenght = splitNameResult.Length;
             for (var i = 0; i <= lenght - 1; i++)

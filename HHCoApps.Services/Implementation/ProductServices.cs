@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using HHCoApps.Core.EF;
+using HHCoApps.Core;
 
 namespace HHCoApps.Services.Implementation
 {
@@ -35,8 +35,6 @@ namespace HHCoApps.Services.Implementation
         {
             var entity = Mapper.Map<Product>(model);
             entity.ProductCode = CalculateProductCode();
-            entity.Id = Guid.NewGuid();
-            entity.IsActive = true;
             return _productRepository.AddProduct(entity);
         }
 

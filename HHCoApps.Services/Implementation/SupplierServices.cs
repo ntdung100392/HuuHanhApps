@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
-using AutoMapper;
-using HHCoApps.Core.EF;
+﻿using AutoMapper;
+using HHCoApps.Core;
 using HHCoApps.Repository;
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
-using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 
 namespace HHCoApps.Services.Implementation
 {
@@ -31,9 +30,6 @@ namespace HHCoApps.Services.Implementation
         public int AddNewSupplier(SupplierModel model)
         {
             var entity = Mapper.Map<Supplier>(model);
-            entity.IsDeleted = false;
-            entity.IsActive = true;
-            entity.Id = Guid.NewGuid();
             return _supplierRepository.AddNewSupplier(entity);
         }
 

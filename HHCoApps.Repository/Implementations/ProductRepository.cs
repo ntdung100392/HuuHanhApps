@@ -1,5 +1,4 @@
 ﻿using HHCoApps.Core;
-using HHCoApps.Core.EF;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,11 +10,11 @@ namespace HHCoApps.Repository.Implementations
     internal  class ProductRepository : IProductRepository
     {
         private const string SQL_CONNECTION_STRING = "HHCoApps";
-        private const string PRODUCT_TABLE_NAME = "dbo.Products";
+        private const string PRODUCT_TABLE_NAME = "dbo.Product";
 
         public IEnumerable<Product> GetProductsOrderByIssuedDate()
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
                 return GetProductsOrderByIssuedDate(context.Products).ToList();
             }
@@ -26,22 +25,22 @@ namespace HHCoApps.Repository.Implementations
             return products.Where(p => !p.IsDeleted).OrderByDescending(p => p.IssuedDate).Include(p => p.Supplier).Include(p => p.Category);
         }
 
-        public IEnumerable<Product> GetProductsBySupplierId(Guid supplierUniqueId)
+        public IEnumerable<Product> GetProductsBySupplierId(int supplierId)
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
-                return GetProductsBySupplierId(context.Products, supplierUniqueId).ToList();
+                return GetProductsBySupplierId(context.Products, supplierId).ToList();
             }
         }
 
-        internal IQueryable<Product> GetProductsBySupplierId(IQueryable<Product> products, Guid supplierUniqueId)
+        internal IQueryable<Product> GetProductsBySupplierId(IQueryable<Product> products, int supplierId)
         {
-            return products.Where(p => p.SupplierId == supplierUniqueId && p.IsActive && !p.IsDeleted);
+            return products.Where(p => p.SupplierId == supplierId && p.IsActive && !p.IsDeleted);
         }
 
         public IEnumerable<Product> GetProducts()
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
                 return GetProducts(context.Products).ToList();
             }
@@ -57,16 +56,13 @@ namespace HHCoApps.Repository.Implementations
             if (string.IsNullOrEmpty(entity.Name))
                 throw new ArgumentNullException(nameof(entity.Name));
 
-            if (entity.Id == null || entity.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(entity.Id));
-
             var keyName = new[]
             {
                 "Name"
             };
             var parameters = new
             {
-                entity.BasePrice,
+                entity.BaseCost,
                 entity.CategoryId,
                 entity.ExpiredDate,
                 entity.IssuedDate,
@@ -77,8 +73,7 @@ namespace HHCoApps.Repository.Implementations
                 entity.Status,
                 entity.Stock,
                 entity.SupplierId,
-                CreatedDate = DateTime.Now,
-                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+                entity.InputCost
             };
 
             var rowAffected = DapperRepositoryUtil.InsertIfNotExist(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
@@ -94,9 +89,6 @@ namespace HHCoApps.Repository.Implementations
             if (string.IsNullOrEmpty(entity.Name))
                 throw new ArgumentNullException(nameof(entity.Name));
 
-            if (entity.Id == null || entity.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(entity.Id));
-
             var keyName = new[]
             {
                 "Id"
@@ -104,7 +96,7 @@ namespace HHCoApps.Repository.Implementations
 
             var parameters = new
             {
-                entity.BasePrice,
+                entity.BaseCost,
                 entity.CategoryId,
                 entity.ExpiredDate,
                 entity.IssuedDate,
@@ -114,9 +106,7 @@ namespace HHCoApps.Repository.Implementations
                 entity.Status,
                 entity.Stock,
                 entity.SupplierId,
-                entity.Id,
-                ModifiedDate = DateTime.Now,
-                ModifiedBy = Thread.CurrentPrincipal.Identity.Name
+                entity.Id
             };
 
             var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
@@ -127,7 +117,7 @@ namespace HHCoApps.Repository.Implementations
             return rowAffected;
         }
 
-        public int DeleteProductsByUniqueIds(IEnumerable<Guid> productUniqueIds)
+        public int DeleteProductsByUniqueIds(IEnumerable<int> productUniqueIds)
         {
             if (!productUniqueIds.Any())
                 throw new ArgumentNullException(nameof(productUniqueIds));

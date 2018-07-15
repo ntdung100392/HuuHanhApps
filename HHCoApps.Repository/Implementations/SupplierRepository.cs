@@ -1,5 +1,4 @@
 ﻿using HHCoApps.Core;
-using HHCoApps.Core.EF;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,11 +10,11 @@ namespace HHCoApps.Repository.Implementations
     internal class SupplierRepository : ISupplierRepository
     {
         private const string SQL_CONNECTION_STRING = "HHCoApps";
-        private const string SUPPLIER_TABLE_NAME = "dbo.Suppliers";
+        private const string SUPPLIER_TABLE_NAME = "dbo.Supplier";
 
         public IEnumerable<Supplier> GetSuppliers()
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
                 return GetAllSuppliers(context.Suppliers).ToList();
             }
@@ -31,9 +30,6 @@ namespace HHCoApps.Repository.Implementations
             if (string.IsNullOrEmpty(model.CompanyName))
                 throw new ArgumentNullException(nameof(model.CompanyName));
 
-            if (model.Id == null || model.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(model.Id));
-
             var keyName = new[]
             {
                 "CompanyName"
@@ -47,13 +43,9 @@ namespace HHCoApps.Repository.Implementations
                 model.Email,
                 model.Fax,
                 model.HomeTown,
-                model.Id,
-                model.IsActive,
                 model.Note,
                 model.Phone,
-                model.TaxCode,
-                CreatedDate = DateTime.Now,
-                CreatedBy = Thread.CurrentPrincipal.Identity.Name
+                model.TaxCode
             };
 
             var rowAffected = DapperRepositoryUtil.InsertIfNotExist(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
@@ -69,9 +61,6 @@ namespace HHCoApps.Repository.Implementations
             if(string.IsNullOrEmpty(model.CompanyName))
                 throw new ArgumentNullException(nameof(model.CompanyName));
 
-            if (model.Id == null || model.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(model.Id));
-
             var parameter = new
             {
                 model.CompanyName,
@@ -80,21 +69,13 @@ namespace HHCoApps.Repository.Implementations
                 model.Email,
                 model.Fax,
                 model.HomeTown,
-                model.Id,
                 model.IsActive,
                 model.Note,
                 model.Phone,
-                model.TaxCode,
-                ModifiedDate = DateTime.Now,
-                ModifiedBy = Thread.CurrentPrincipal.Identity.Name
+                model.TaxCode
             };
 
-            var keyName = new[]
-            {
-                "Id"
-            };
-
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameter, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(SUPPLIER_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), "Id", model.Id, parameter, true);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

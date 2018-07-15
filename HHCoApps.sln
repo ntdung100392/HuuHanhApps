@@ -17,6 +17,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PublishDatabase", "PublishD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Repository", "HHCoApps.Repository\HHCoApps.Repository.csproj", "{489BEFA8-5AF6-4D20-9E00-C2D6F082CFBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HHCoApps.Migration", "HHCoApps.Migration\HHCoApps.Migration.csproj", "{3BE6DE7C-AE68-4659-93B6-887B0F095205}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{489BEFA8-5AF6-4D20-9E00-C2D6F082CFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{489BEFA8-5AF6-4D20-9E00-C2D6F082CFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{489BEFA8-5AF6-4D20-9E00-C2D6F082CFBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BE6DE7C-AE68-4659-93B6-887B0F095205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE6DE7C-AE68-4659-93B6-887B0F095205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE6DE7C-AE68-4659-93B6-887B0F095205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE6DE7C-AE68-4659-93B6-887B0F095205}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

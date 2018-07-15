@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using AutoMapper;
+﻿using AutoMapper;
 using HHCoApps.Libs;
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
 using WareHouseApps.Helper;
-using WareHouseApps.Models;
 
 namespace WareHouseApps
 {
@@ -88,14 +82,15 @@ namespace WareHouseApps
         {
             var viewModel = new ProductModel
             {
-                BasePrice = Convert.ToDecimal(txtBaseCost.Text),
+                BaseCost = Convert.ToDecimal(txtBaseCost.Text),
+                InputCost = Convert.ToDecimal(txtBaseCost.Text),
                 CategoryId = (int)cbxCategory.SelectedValue,
-                SupplierId = Guid.Parse(cbxSupplier.SelectedValue.ToString()),
+                SupplierId = (int)cbxSupplier.SelectedValue,
                 Stock = Convert.ToInt32(txtStock.Text),
                 Name = txtName.Text,
                 IssuedDate = dtPickerIssuedDate.Value,
                 ExpiredDate = dtPickerExpiredDate.Value,
-                Status = (int)cbxStatus.SelectedValue
+                Status = cbxStatus.SelectedValue.ToString()
             };
             try
             {

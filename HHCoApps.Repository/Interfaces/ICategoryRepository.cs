@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using HHCoApps.Core.EF;
+using HHCoApps.Core;
 
 namespace HHCoApps.Repository
 {

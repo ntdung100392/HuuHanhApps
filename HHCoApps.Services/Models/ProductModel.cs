@@ -8,13 +8,15 @@ namespace HHCoApps.Services.Models
 {
     public class ProductModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+        public Guid UniqueId { get; set; }
         public string ProductCode { get; set; }
         public string Name { get; set; }
         public int CategoryId { get; set; }
-        public Guid SupplierId { get; set; }
-        public decimal BasePrice { get; set; }
-        public int Status { get; set; }
+        public int SupplierId { get; set; }
+        public decimal InputCost { get; set; }
+        public decimal BaseCost { get; set; }
+        public string Status { get; set; }
         public DateTime IssuedDate { get; set; }
         public DateTime? ExpiredDate { get; set; }
         public int Stock { get; set; }

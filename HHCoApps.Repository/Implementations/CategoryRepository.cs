@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using HHCoApps.Core;
-using HHCoApps.Core.EF;
 
 namespace HHCoApps.Repository.Implementations
 {
     internal class CategoryRepository : ICategoryRepository
     {
         private readonly string SQL_CONNECTION_STRING = "HHCoApps";
-        private readonly string TABLE_NAME = "dbo.Categories";
+        private readonly string TABLE_NAME = "dbo.Category";
 
         public IEnumerable<Category> GetCategories()
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
                 return GetCategories(context.Categories).ToList();
             }
@@ -27,7 +25,7 @@ namespace HHCoApps.Repository.Implementations
 
         public Category GetCategoryById(int categoryId)
         {
-            using (var context = new HHCoAppsDBContext())
+            using (var context = new HHCoAppsEntities())
             {
                 return GetCategoryById(categoryId, context.Categories);
             }
@@ -54,8 +52,6 @@ namespace HHCoApps.Repository.Implementations
             {
                 entity.Code,
                 entity.Name,
-                CreatedDate = DateTime.Now,
-                CreatedBy = Thread.CurrentPrincipal.Identity.Name
             };
 
             var rowAffected = DapperRepositoryUtil.InsertIfNotExist(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
@@ -74,19 +70,13 @@ namespace HHCoApps.Repository.Implementations
             if (string.IsNullOrEmpty(entity.Code))
                 throw new ArgumentNullException(nameof(entity.Code));
 
-            var keyName = new[]
-            {
-                "Id"
-            };
             var parameters = new
             {
                 entity.Code,
                 entity.Name,
-                ModifiedBy = DateTime.Now,
-                ModifiedDate = Thread.CurrentPrincipal.Identity.Name
             };
 
-            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), "Id", entity.Id, parameters, true);
 
             if (rowAffected < 1)
                 throw new ArgumentException("Đã Có Lỗi Xảy Ra!");

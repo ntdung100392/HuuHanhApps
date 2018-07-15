@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HHCoApps.Core.EF;
+using HHCoApps.Core;
 
 namespace HHCoApps.Repository
 {

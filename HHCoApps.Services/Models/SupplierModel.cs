@@ -8,7 +8,7 @@ namespace HHCoApps.Services.Models
 {
     public class SupplierModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }

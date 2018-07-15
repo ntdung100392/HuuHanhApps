@@ -50,9 +50,9 @@ namespace HHCoApps.Repository
             return ExecuteNonQuery(connectionString, dynamicParameter, sql);
         }
 
-        public static int UpdateRecordInTable(string tableName, string connectionString, string idColumnName, int id, object dynamicParameter)
+        public static int UpdateRecordInTable(string tableName, string connectionString, string idColumnName, int id, object dynamicParameter, bool setUpdatedDateTime = false)
         {
-            string sql = BuildUpdateSql(tableName, idColumnName, id, dynamicParameter);
+            string sql = BuildUpdateSql(tableName, idColumnName, id, dynamicParameter, setUpdatedDateTime);
 
             return ExecuteNonQuery(connectionString, dynamicParameter, sql);
         }
@@ -231,10 +231,10 @@ namespace HHCoApps.Repository
             return BuildUpdateSql(tableName, uniqueIdColumnName, uniqueIdString, parameters, setUpdatedDateTime);
         }
 
-        private static string BuildUpdateSql(string tableName, string idColumnName, int id, object parameters)
+        private static string BuildUpdateSql(string tableName, string idColumnName, int id, object parameters, bool setUpdatedDateTime)
         {
             string idString = id.ToString();
-            return BuildUpdateSql(tableName, idColumnName, idString, parameters);
+            return BuildUpdateSql(tableName, idColumnName, idString, parameters, setUpdatedDateTime);
         }
 
         public static int DeleteRecordsInTable(string tableName, string connectionString, string idColumnName, int id)

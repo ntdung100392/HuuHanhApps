@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AutoMapper;
-using HHCoApps.Core.EF;
+using HHCoApps.Core;
 using HHCoApps.Repository;
 using HHCoApps.Services.Interfaces;
 using HHCoApps.Services.Models;

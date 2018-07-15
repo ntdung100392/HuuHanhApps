@@ -60,6 +60,9 @@
     <Folder Include="MainScripts" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="MainScripts\Deployment.sql" />
+    <Build Include="MainScripts\HHCoApps.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishDatabase.publish.xml" />
   </ItemGroup>
 </Project>

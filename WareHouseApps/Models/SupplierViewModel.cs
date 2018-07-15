@@ -8,7 +8,7 @@ namespace WareHouseApps.Models
 {
     public class SupplierViewModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }

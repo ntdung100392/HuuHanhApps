@@ -51,13 +51,20 @@ namespace WareHouseApps
             {
                 dtPickerIssuedDate.MaxDate = new DateTime(DateTime.Now.Year, 12, 31);
 
+                dtPickerFrom.MinDate = new DateTime(DateTime.Now.Year, 1, 1);
+                dtPickerFrom.MaxDate = new DateTime(DateTime.Now.Year, 12, 31);
+                dtPickerFrom.Value = DateTime.Now;
+
+                dtPickerTo.MinDate = dtPickerIssuedDate.Value.AddDays(1);
+                dtPickerTo.Value = dtPickerIssuedDate.Value.AddDays(2);
+
                 var categoryList = _categoryServices.GetCategories().ToList();
 
                 cbxCategory.DataSource = categoryList;
                 cbxCategory.DisplayMember = "Name";
                 cbxCategory.ValueMember = "Id";
 
-                cbxCategorySearch.DataSource = categoryList;
+                cbxCategorySearch.DataSource = _categoryServices.GetCategories().ToList();
                 cbxCategorySearch.DisplayMember = "Name";
                 cbxCategorySearch.ValueMember = "Id";
 
@@ -135,7 +142,7 @@ namespace WareHouseApps
                 return;
 
             _currentProduct = _productList[e.RowIndex];
-            txtBaseCost.Text = _currentProduct.BasePrice.ToString();
+            txtBaseCost.Text = _currentProduct.BaseCost.ToString();
             txtCode.Text = _currentProduct.ProductCode;
             txtName.Text = _currentProduct.Name;
             txtStock.Text = _currentProduct.Stock.ToString();
@@ -143,7 +150,7 @@ namespace WareHouseApps
             cbxCategory.Text = _currentProduct.CategoryName;
             cbxSupplier.Text = _currentProduct.SupplierName;
             cbxIsActive.Checked = _currentProduct.IsActive;
-            cbxStatus.Text = _currentProduct.StatusDisplay;
+            //cbxStatus.Text = _currentProduct.StatusDisplay;
 
             dtPickerIssuedDate.Value = _currentProduct.IssuedDate;
             dtPickerExpiredDate.Value = _currentProduct.ExpiredDate ?? new DateTime(DateTime.Now.Year, 12, 31);
@@ -169,14 +176,14 @@ namespace WareHouseApps
 
             try
             {
-                _currentProduct.BasePrice = Convert.ToDecimal(txtBaseCost.Text);
+                _currentProduct.BaseCost = Convert.ToDecimal(txtBaseCost.Text);
                 _currentProduct.CategoryId = (int)cbxCategory.SelectedValue;
-                _currentProduct.SupplierId = Guid.Parse(cbxSupplier.SelectedValue.ToString());
+                _currentProduct.SupplierId = (int)cbxSupplier.SelectedValue;
                 _currentProduct.Stock = Convert.ToInt32(txtStock.Text);
                 _currentProduct.Name = txtName.Text;
                 _currentProduct.IssuedDate = dtPickerIssuedDate.Value;
                 _currentProduct.ExpiredDate = dtPickerExpiredDate.Value;
-                _currentProduct.Status = (int)cbxStatus.SelectedValue;
+                _currentProduct.Status = cbxStatus.SelectedValue.ToString();
                 _currentProduct.IsActive = cbxIsActive.Checked;
                 var model = Mapper.Map<ProductModel>(_currentProduct);
 
@@ -194,6 +201,13 @@ namespace WareHouseApps
                 _logger.Error(ex.Message);
                 ErrorMessage();
             }
+        }
+
+        private void ResetFilter(object sender, EventArgs e)
+        {
+            txtProductNameSearch.Clear();
+            LoadData();
+            LoadProducts();
         }
     }
 }

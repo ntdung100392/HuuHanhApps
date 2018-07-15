@@ -14,9 +14,9 @@ namespace WareHouseApps
     public partial class SupplierList : BaseMethod
     {
         private readonly ISupplierServices _supplierServices;
-        private IList<SupplierViewModel> supplierList;
-        private IList<SupplierViewModel> filterList;
-        private SupplierViewModel currentSupplier;
+        private IList<SupplierViewModel> _supplierList;
+        private IList<SupplierViewModel> _filterList;
+        private SupplierViewModel _currentSupplier;
 
         public SupplierList(ISupplierServices supplierServices)
         {
@@ -36,18 +36,18 @@ namespace WareHouseApps
             if (YesNoDialog() != DialogResult.Yes)
                 return;
 
-            currentSupplier.Address = txtAddress.Text;
-            currentSupplier.CompanyName = txtCompany.Text;
-            currentSupplier.DirectorName = txtDirector.Text;
-            currentSupplier.Email = txtEmail.Text;
-            currentSupplier.Fax = txtFax.Text;
-            currentSupplier.HomeTown = txtHomeTown.Text;
-            currentSupplier.Note = txtInformation.Text;
-            currentSupplier.TaxCode = txtTaxCode.Text;
-            currentSupplier.Phone = txtPhone.Text;
-            currentSupplier.IsActive = cbxIsActive.Checked;
+            _currentSupplier.Address = txtAddress.Text;
+            _currentSupplier.CompanyName = txtCompany.Text;
+            _currentSupplier.DirectorName = txtDirector.Text;
+            _currentSupplier.Email = txtEmail.Text;
+            _currentSupplier.Fax = txtFax.Text;
+            _currentSupplier.HomeTown = txtHomeTown.Text;
+            _currentSupplier.Note = txtInformation.Text;
+            _currentSupplier.TaxCode = txtTaxCode.Text;
+            _currentSupplier.Phone = txtPhone.Text;
+            _currentSupplier.IsActive = cbxIsActive.Checked;
 
-            if (_supplierServices.UpdateSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+            if (_supplierServices.UpdateSupplier(Mapper.Map<SupplierModel>(_currentSupplier)) != 0)
             {
                 LoadSuppliers();
                 SuccessMessage();
@@ -66,10 +66,10 @@ namespace WareHouseApps
 
             try
             {
-                if (_supplierServices.DeleteSupplier(Mapper.Map<SupplierViewModel, SupplierModel>(currentSupplier)) != 0)
+                if (_supplierServices.DeleteSupplier(Mapper.Map<SupplierModel>(_currentSupplier)) != 0)
                 {
                     LoadSuppliers();
-                    currentSupplier = null;
+                    _currentSupplier = null;
                     SuccessMessage();
                     ClearForm();
                 }
@@ -105,10 +105,10 @@ namespace WareHouseApps
                 var result = _supplierServices.GetSuppliers();
                 if (result.Any())
                 {
-                    supplierList = result.ToList().Select(s => Mapper.Map<SupplierViewModel>(s)).ToList();
+                    _supplierList = result.ToList().Select(Mapper.Map<SupplierViewModel>).ToList();
                 }
 
-                supplierViewModelBindingSource.DataSource = supplierList;
+                supplierViewModelBindingSource.DataSource = _supplierList;
             }
             catch(Exception ex)
             {
@@ -122,17 +122,17 @@ namespace WareHouseApps
             if (e.RowIndex < 0)
                 return;
 
-            currentSupplier = supplierList[e.RowIndex];
-            txtAddress.Text = currentSupplier.Address;
-            txtCompany.Text = currentSupplier.CompanyName;
-            txtDirector.Text = currentSupplier.DirectorName;
-            txtEmail.Text = currentSupplier.Email;
-            txtFax.Text = currentSupplier.Fax;
-            txtHomeTown.Text = currentSupplier.HomeTown;
-            txtInformation.Text = currentSupplier.Note;
-            txtTaxCode.Text = currentSupplier.TaxCode;
-            txtPhone.Text = currentSupplier.Phone;
-            cbxIsActive.Checked = currentSupplier.IsActive;
+            _currentSupplier = _supplierList[e.RowIndex];
+            txtAddress.Text = _currentSupplier.Address;
+            txtCompany.Text = _currentSupplier.CompanyName;
+            txtDirector.Text = _currentSupplier.DirectorName;
+            txtEmail.Text = _currentSupplier.Email;
+            txtFax.Text = _currentSupplier.Fax;
+            txtHomeTown.Text = _currentSupplier.HomeTown;
+            txtInformation.Text = _currentSupplier.Note;
+            txtTaxCode.Text = _currentSupplier.TaxCode;
+            txtPhone.Text = _currentSupplier.Phone;
+            cbxIsActive.Checked = _currentSupplier.IsActive;
 
             txtAddress.Enabled = true;
             txtCompany.Enabled = true;
@@ -154,12 +154,12 @@ namespace WareHouseApps
             if (!string.IsNullOrEmpty(txtSearch.Text.Trim()))
             {
                 var filter = txtSearch.Text.Trim();
-                filterList = supplierList.Where(s => s.CompanyName.Contains(filter) || s.DirectorName.Contains(filter)).ToList();
-                supplierViewModelBindingSource.DataSource = filterList;
+                _filterList = _supplierList.Where(s => s.CompanyName.Contains(filter) || s.DirectorName.Contains(filter)).ToList();
+                supplierViewModelBindingSource.DataSource = _filterList;
             }
             else
             {
-                supplierViewModelBindingSource.DataSource = supplierList;
+                supplierViewModelBindingSource.DataSource = _supplierList;
             }
         }
         
