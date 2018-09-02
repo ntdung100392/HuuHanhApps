@@ -57,10 +57,12 @@
     <Compile Include="Dapper\DapperRepositoryUtil.cs" />
     <Compile Include="Dapper\DbUtilities.cs" />
     <Compile Include="Implementations\CategoryRepository.cs" />
+    <Compile Include="Implementations\ImportProductRepository.cs" />
     <Compile Include="Implementations\ProductRepository.cs" />
     <Compile Include="Implementations\SupplierRepository.cs" />
     <Compile Include="Implementations\UserRepository.cs" />
     <Compile Include="Interfaces\ICategoryRepository.cs" />
+    <Compile Include="Interfaces\IImportProductRepository.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\ISupplierRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />

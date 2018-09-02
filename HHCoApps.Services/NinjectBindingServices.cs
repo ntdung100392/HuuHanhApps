@@ -12,6 +12,7 @@ namespace HHCoApps.Services
             Bind<IProductServices>().To<ProductServices>();
             Bind<ISupplierServices>().To<SupplierServices>();
             Bind<ICategoryServices>().To<CategoryServices>();
+            Bind<IImportProductServices>().To<ImportProductServices>();
         }
     }
 }

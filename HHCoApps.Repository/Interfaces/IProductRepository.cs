@@ -12,5 +12,6 @@ namespace HHCoApps.Repository
         IEnumerable<Product> GetProducts();
         int AddProduct(Product model);
         int UpdateProductByUniqueId(Product model);
+        int UpdateProductQuantityByProductId(int productId, int quantity);
     }
 }

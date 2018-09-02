@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HHCoAppsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HHCoAppsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -53,6 +53,20 @@
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="Updated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ImportLogs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="TotalCost" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="TotalBaseCost" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ForeignCurrency" Type="nvarchar" MaxLength="18" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
@@ -132,6 +146,30 @@
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="Updated" Type="datetime" />
         </EntityType>
+        <Association Name="FK_ImportLogs_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="ImportLogs" Type="Self.ImportLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLogs">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImportLogs_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="ImportLogs" Type="Self.ImportLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLogs">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
@@ -156,15 +194,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RequestedBy">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ImportLogs" Type="Self.ImportLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLogs">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="HHCoAppsModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImportLogs" EntityType="Self.ImportLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ImportLogs_Product" Association="Self.FK_ImportLogs_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ImportLogs" EntitySet="ImportLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImportLogs_Supplier" Association="Self.FK_ImportLogs_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="ImportLogs" EntitySet="ImportLogs" />
+          </AssociationSet>
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Product" EntitySet="Product" />
@@ -173,9 +232,12 @@
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_RequestedBy" Association="Self.FK_RequestedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="ImportLogs" EntitySet="ImportLogs" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HHCoAppsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -264,6 +326,7 @@
           <Property Name="Updated" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_Product_Supplier" FromRole="Product" ToRole="Supplier" />
+          <NavigationProperty Name="ImportLogs" Relationship="HHCoAppsModel.FK_ImportProduct" FromRole="Product" ToRole="ImportLog" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -284,6 +347,7 @@
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Updated" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Product_Supplier" FromRole="Supplier" ToRole="Product" />
+          <NavigationProperty Name="ImportLogs" Relationship="HHCoAppsModel.FK_ImportSupplier" FromRole="Supplier" ToRole="ImportLog" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -309,6 +373,7 @@
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Updated" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ImportLogs" Relationship="HHCoAppsModel.FK_RequestedBy" FromRole="User" ToRole="ImportLog" />
         </EntityType>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
@@ -351,7 +416,73 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <EntitySet Name="ImportLogs" EntityType="HHCoAppsModel.ImportLog" />
+          <AssociationSet Name="FK_ImportProduct" Association="HHCoAppsModel.FK_ImportProduct">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ImportLog" EntitySet="ImportLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequestedBy" Association="HHCoAppsModel.FK_RequestedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ImportLog" EntitySet="ImportLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImportSupplier" Association="HHCoAppsModel.FK_ImportSupplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="ImportLog" EntitySet="ImportLogs" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ImportLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="HHCoAppsModel.FK_ImportProduct" FromRole="ImportLog" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="HHCoAppsModel.FK_RequestedBy" FromRole="ImportLog" ToRole="User" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Supplier" Relationship="HHCoAppsModel.FK_ImportSupplier" FromRole="ImportLog" ToRole="Supplier" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="TotalCost" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="TotalBaseCost" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="ForeignCurrency" Type="String" Nullable="false" MaxLength="18" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ImportProduct">
+          <End Type="HHCoAppsModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="HHCoAppsModel.ImportLog" Role="ImportLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLog">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RequestedBy">
+          <End Type="HHCoAppsModel.User" Role="User" Multiplicity="1" />
+          <End Type="HHCoAppsModel.ImportLog" Role="ImportLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLog">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImportSupplier">
+          <End Type="HHCoAppsModel.Supplier" Role="Supplier" Multiplicity="1" />
+          <End Type="HHCoAppsModel.ImportLog" Role="ImportLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImportLog">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -489,6 +620,21 @@
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="Updated" ColumnName="Updated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImportLogs">
+            <EntityTypeMapping TypeName="HHCoAppsModel.ImportLog">
+              <MappingFragment StoreEntitySet="ImportLogs">
+                <ScalarProperty Name="ForeignCurrency" ColumnName="ForeignCurrency" />
+                <ScalarProperty Name="TotalBaseCost" ColumnName="TotalBaseCost" />
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

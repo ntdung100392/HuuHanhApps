@@ -14,6 +14,12 @@ namespace HHCoApps.Core
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.ImportLogs = new HashSet<ImportLog>();
+        }
+    
         public int Id { get; set; }
         public System.Guid UniqueId { get; set; }
         public string UserName { get; set; }
@@ -34,5 +40,8 @@ namespace HHCoApps.Core
         public bool IsDeleted { get; set; }
         public System.DateTime Created { get; set; }
         public Nullable<System.DateTime> Updated { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ImportLog> ImportLogs { get; set; }
     }
 }

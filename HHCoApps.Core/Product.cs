@@ -14,6 +14,12 @@ namespace HHCoApps.Core
     
     public partial class Product
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Product()
+        {
+            this.ImportLogs = new HashSet<ImportLog>();
+        }
+    
         public int Id { get; set; }
         public System.Guid UniqueId { get; set; }
         public string ProductCode { get; set; }
@@ -34,5 +40,7 @@ namespace HHCoApps.Core
     
         public virtual Category Category { get; set; }
         public virtual Supplier Supplier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ImportLog> ImportLogs { get; set; }
     }
 }

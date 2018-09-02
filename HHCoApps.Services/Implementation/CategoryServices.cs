@@ -22,7 +22,7 @@ namespace HHCoApps.Services.Implementation
         public IEnumerable<CategoryModel> GetCategories()
         {
             var categories = _categoryRepository.GetCategories();
-            return categories.Any() ? categories.Select(c => Mapper.Map<CategoryModel>(c)).ToList() : Enumerable.Empty<CategoryModel>();
+            return categories.Any() ? categories.Select(Mapper.Map<CategoryModel>).ToList() : Enumerable.Empty<CategoryModel>();
         }
 
         public CategoryModel GetCategoryById(int categoryId)

@@ -142,5 +142,29 @@ namespace HHCoApps.Repository.Implementations
 
             return rowAffected;
         }
+
+        public int UpdateProductQuantityByProductId(int productId, int quantity)
+        {
+            if (productId >= 0 || quantity == 0)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            var keyName = new[]
+            {
+                "Id"
+            };
+
+            var parameters = new
+            {
+                Stock = quantity,
+                Id = productId
+            };
+
+            var rowAffected = DapperRepositoryUtil.UpdateRecordInTable(PRODUCT_TABLE_NAME, DbUtilities.GetConnString(SQL_CONNECTION_STRING), parameters, keyName);
+
+            if (rowAffected < 1)
+                throw new ArgumentException("Đã Có Lỗi Xảy Ra!");
+
+            return rowAffected;
+        }
     }
 }

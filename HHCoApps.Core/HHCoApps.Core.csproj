@@ -76,6 +76,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HHCoAppsContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ImportLog.cs">
+      <DependentUpon>HHCoAppsContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs">
       <DependentUpon>HHCoAppsContext.tt</DependentUpon>
     </Compile>

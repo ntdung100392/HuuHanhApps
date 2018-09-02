@@ -16,6 +16,7 @@ namespace WareHouseApps
         public ImportProduct()
         {
             InitializeComponent();
+            CenterToParent();
         }
     }
 }

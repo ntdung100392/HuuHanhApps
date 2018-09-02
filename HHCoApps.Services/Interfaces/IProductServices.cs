@@ -10,5 +10,6 @@ namespace HHCoApps.Services.Interfaces
         IEnumerable<ProductModel> GetProductsOrderByIssuedDate();
         int AddNewProduct(ProductModel model);
         int UpdateProductByUniqueId(ProductModel model);
+        IEnumerable<ProductModel> GetAllProduct();
     }
 }

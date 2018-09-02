@@ -15,6 +15,10 @@
         <EntityTypeShape EntityType="HHCoAppsModel.User" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="HHCoAppsModel.FK_Product_Category" ManuallyRouted="false" />
         <AssociationConnector Association="HHCoAppsModel.FK_Product_Supplier" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HHCoAppsModel.ImportLog" Width="1.5" PointX="10" PointY="4.375" />
+        <AssociationConnector Association="HHCoAppsModel.FK_ImportProduct" />
+        <AssociationConnector Association="HHCoAppsModel.FK_RequestedBy" />
+        <AssociationConnector Association="HHCoAppsModel.FK_ImportSupplier" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -11,8 +11,8 @@ namespace HHCoApps.Services.Implementation
 {
     internal class ProductServices : IProductServices
     {
-        private IProductRepository _productRepository;
-        private ICategoryServices _categoryServices;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryServices _categoryServices;
 
         public ProductServices(IProductRepository productRepository, ICategoryServices categoryServices)
         {
@@ -52,6 +52,16 @@ namespace HHCoApps.Services.Implementation
 
             var productsCount = products.Count();
             return $"SP{productsCount}";
+        }
+
+        public IEnumerable<ProductModel> GetAllProduct()
+        {
+            return _productRepository.GetProducts().Select(Mapper.Map<ProductModel>).ToList();
+        }
+
+        public void UpdateProductStock(int productId, int quantity)
+        {
+
         }
     }
 }
